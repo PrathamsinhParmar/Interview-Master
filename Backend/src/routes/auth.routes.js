@@ -24,7 +24,7 @@ authRouter.post('/login', authController.loginUserController)
  * @description Used to logout a loggedin user
  * @access Public
  */
-authRouter.post('/logout', authController.logoutUserController)
+authRouter.get('/logout', authController.logoutUserController)
 
 
 /**
@@ -32,6 +32,6 @@ authRouter.post('/logout', authController.logoutUserController)
  * @description Used to fetch user details
  * @access Private
  */
-authRouter.post('/get-me', authMiddlewares.authUserMiddleware ,authController.getUserDataController)
+authRouter.get('/get-me', authMiddlewares.authUserMiddleware ,authController.getUserDataController)
 
 module.exports = authRouter
