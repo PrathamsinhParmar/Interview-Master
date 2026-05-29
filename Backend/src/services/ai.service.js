@@ -224,10 +224,28 @@ const generateInterviewReport = async({resume, selfDescription, jobDescription})
     })
 
 
-    const data = JSON.parse(response.text)
+    let json;
 
-    console.log(data)
+    try {
+        json = JSON.parse(response.text);
+    } catch (error) {
+        console.error("Gemini returned invalid JSON:");
+        console.error(response.text);
+        throw new Error("Invalid JSON returned by Gemini.");
+    }
 
+    const validated = interviewReportSchema.safeParse(json);
+
+    if (!validated.success) {
+        console.error("Schema validation failed:");
+        console.error(validated.error.flatten());
+        console.error("Raw Gemini output:");
+        console.error(json);
+
+        throw new Error("Gemini response did not match the Zod schema.");
+    }
+
+    return validated.data;
 }
 
 module.exports = generateInterviewReport

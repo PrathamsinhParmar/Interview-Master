@@ -1,5 +1,6 @@
 const express = require('express')
 const authRouter = require('./routes/auth.routes')
+const interviewRouter = require('./routes/interview.routes')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 
@@ -17,5 +18,12 @@ app.use(cors({
  * @description Auth Routes (Register, Login, Logout)
  */
 app.use('/api/auth', authRouter)
+
+
+/**
+ * @route POST/api/interview
+ * @description Interview Routes
+ */
+app.use('/api/interview', interviewRouter)
 
 module.exports = app
