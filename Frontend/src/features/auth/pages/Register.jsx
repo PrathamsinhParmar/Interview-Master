@@ -2,6 +2,7 @@ import React, {useState } from 'react'
 import "../auth.form.scss"
 import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth'
+import Loader from '../../../components/Loader'
 
 const Register = () => {
 
@@ -29,9 +30,7 @@ const Register = () => {
     if(loading){
         return(
             <main className="login-container">
-                <div className="login-card" style={{textAlign: 'center'}}>
-                    <h1>Loading...</h1>
-                </div>
+                <Loader variant="circle" />
             </main>
         )
     }

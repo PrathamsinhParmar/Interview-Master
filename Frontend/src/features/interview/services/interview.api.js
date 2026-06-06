@@ -13,8 +13,13 @@ export const generateInterviewReport = async ({ jobDescription, selfDescription,
 
     const formData = new FormData()
     formData.append("jobDescription", jobDescription)
-    formData.append("selfDescription", selfDescription)
-    formData.append("resume", resumeFile)
+    formData.append("selfDescription", selfDescription || "")
+
+    // Only append the file if one was actually selected — appending undefined sends
+    // the literal string "undefined" which breaks multer on the backend.
+    if (resumeFile instanceof File) {
+        formData.append("resume", resumeFile)
+    }
 
     const response = await api.post("/api/interview/", formData, {
         headers: {
@@ -55,5 +60,14 @@ export const generateResumePdf = async ({ interviewReportId }) => {
         responseType: "blob"
     })
 
+    return response.data
+}
+
+
+/**
+ * @description Service to delete an interview report by its ID.
+ */
+export const deleteInterviewReport = async (interviewId) => {
+    const response = await api.delete(`/api/interview/${interviewId}`)
     return response.data
 }

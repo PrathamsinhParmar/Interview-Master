@@ -3,6 +3,8 @@ import '../styles/interview.scss'
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate, useParams } from 'react-router'
 import { useAuth } from '../../auth/hooks/useAuth.js'
+import Navbar from '../../../components/Navbar.jsx'
+import Loader from '../../../components/Loader.jsx'
 
 
 
@@ -24,18 +26,20 @@ const QuestionCard = ({ item, index }) => {
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
                 </span>
             </div>
-            {open && (
-                <div className='q-card__body'>
-                    <div className='q-card__section'>
-                        <span className='q-card__tag q-card__tag--intention'>Intention</span>
-                        <p>{item.intention}</p>
-                    </div>
-                    <div className='q-card__section'>
-                        <span className='q-card__tag q-card__tag--answer'>Model Answer</span>
-                        <p>{item.answer}</p>
+            <div className={`q-card__body-wrapper ${open ? 'q-card__body-wrapper--open' : ''}`}>
+                <div className='q-card__body-inner'>
+                    <div className='q-card__body'>
+                        <div className='q-card__section'>
+                            <span className='q-card__tag q-card__tag--intention'>Intention</span>
+                            <p>{item.intention}</p>
+                        </div>
+                        <div className='q-card__section'>
+                            <span className='q-card__tag q-card__tag--answer'>Model Answer</span>
+                            <p>{item.answer}</p>
+                        </div>
                     </div>
                 </div>
-            )}
+            </div>
         </div>
     )
 }
@@ -60,7 +64,7 @@ const RoadMapDay = ({ day }) => (
 // ── Main Component ────────────────────────────────────────────────────────────
 const Interview = () => {
     const [ activeNav, setActiveNav ] = useState('technical')
-    const { report, getReportById, loading, getResumePdf } = useInterview()
+    const { report, getReportById, loading, getResumePdf, deleteReport } = useInterview()
     const { user, handleLogout } = useAuth()
     const { interviewId } = useParams()
     const navigate = useNavigate()
@@ -73,13 +77,7 @@ const Interview = () => {
 
 
 
-    if (loading || !report) {
-        return (
-            <main className='loading-screen'>
-                <h1>Loading your interview plan...</h1>
-            </main>
-        )
-    }
+    if (loading || !report) return <Loader variant="fetch" />
 
     const scoreColor =
         report.matchScore >= 80 ? 'score--high' :
@@ -89,36 +87,7 @@ const Interview = () => {
     return (
         <div className='interview-page'>
             {/* App Navbar */}
-            <nav className='app-navbar' style={{ marginBottom: '1.5rem' }}>
-                <div className='navbar-brand' onClick={() => navigate('/')}>
-                    <span className='brand-icon'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    </span>
-                    <span className='brand-name'>Interview <span className='highlight'>Master</span></span>
-                </div>
-                <div className='navbar-user'>
-                    <button className='back-btn' onClick={() => navigate('/')} style={{
-                        marginRight: '1.5rem',
-                        background: 'transparent',
-                        border: 'none',
-                        color: '#7d8590',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        fontSize: '0.9rem',
-                        transition: 'color 0.2s'
-                    }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                        Back to Home
-                    </button>
-                    <span className='user-name'>Hello, <strong>{user?.username}</strong></span>
-                    <button className='logout-btn' onClick={handleLogout}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
-                        Logout
-                    </button>
-                </div>
-            </nav>
+            <Navbar />
 
             <div className='interview-layout'>
 
@@ -137,12 +106,25 @@ const Interview = () => {
                             </button>
                         ))}
                     </div>
-                    <button
-                        onClick={() => { getResumePdf(interviewId) }}
-                        className='button primary-button' >
-                        <svg height={"0.8rem"} style={{ marginRight: "0.8rem" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956ZM19.4014 22.6899 19.6482 22.1242C20.0882 21.1156 20.8807 20.3125 21.8695 19.8732L22.6299 19.5353C23.0412 19.3526 23.0412 18.7549 22.6299 18.5722L21.9121 18.2532C20.8978 17.8026 20.0911 16.9698 19.6586 15.9269L19.4052 15.3156C19.2285 14.8896 18.6395 14.8896 18.4628 15.3156L18.2094 15.9269C17.777 16.9698 16.9703 17.8026 15.956 18.2532L15.2381 18.5722C14.8269 18.7549 14.8269 19.3526 15.2381 19.5353L15.9985 19.8732C16.9874 20.3125 17.7798 21.1156 18.2198 22.1242L18.4667 22.6899C18.6473 23.104 19.2207 23.104 19.4014 22.6899Z"></path></svg>
-                        Download Resume
-                    </button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <button
+                            onClick={() => { getResumePdf(interviewId) }}
+                            className='button primary-button' >
+                            <svg height={"1.25rem"} width={"1.25rem"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956ZM19.4014 22.6899 19.6482 22.1242C20.0882 21.1156 20.8807 20.3125 21.8695 19.8732L22.6299 19.5353C23.0412 19.3526 23.0412 18.7549 22.6299 18.5722L21.9121 18.2532C20.8978 17.8026 20.0911 16.9698 19.6586 15.9269L19.4052 15.3156C19.2285 14.8896 18.6395 14.8896 18.4628 15.3156L18.2094 15.9269C17.777 16.9698 16.9703 17.8026 15.956 18.2532L15.2381 18.5722C14.8269 18.7549 14.8269 19.3526 15.2381 19.5353L15.9985 19.8732C16.9874 20.3125 17.7798 21.1156 18.2198 22.1242L18.4667 22.6899C18.6473 23.104 19.2207 23.104 19.4014 22.6899Z"></path></svg>
+                            Download Resume
+                        </button>
+                        <button
+                            onClick={async () => {
+                                if(window.confirm('Are you sure you want to delete this report?')) {
+                                    await deleteReport(interviewId);
+                                    navigate('/');
+                                }
+                            }}
+                            className='button danger-button' >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.25rem" height="1.25rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                            Delete Report
+                        </button>
+                    </div>
                 </nav>
 
                 <div className='interview-divider' />

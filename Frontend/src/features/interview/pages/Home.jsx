@@ -3,10 +3,12 @@ import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
 import { useAuth } from '../../auth/hooks/useAuth.js'
 import '../styles/home.scss'
+import Navbar from '../../../components/Navbar.jsx'
+import Loader from '../../../components/Loader.jsx'
 
 const Home = () => {
 
-    const { loading, generateReport, reports } = useInterview()
+    const { loading, generating, generateReport, reports, deleteReport } = useInterview()
     const { user, handleLogout } = useAuth()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
@@ -37,38 +39,25 @@ const Home = () => {
         }
     }
 
-    if (loading) {
-        return (
-            <main className='loading-screen'>
-                <h1>Loading your interview plan...</h1>
-            </main>
-        )
-    }
+    if (generating) return <Loader variant="generate" />
+    if (loading)    return <Loader variant="fetch" />
 
     return (
         <div className='home-page'>
+            {/* Dynamic Background */}
+            <div className="ambient-background">
+                <div className="glow-orb orb-1"></div>
+                <div className="glow-orb orb-2"></div>
+                <div className="glow-orb orb-3"></div>
+            </div>
 
             {/* App Navbar */}
-            <nav className='app-navbar'>
-                <div className='navbar-brand' onClick={() => navigate('/')}>
-                    <span className='brand-icon'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    </span>
-                    <span className='brand-name'>Interview <span className='highlight'>Master</span></span>
-                </div>
-                <div className='navbar-user'>
-                    <span className='user-name'>Hello, <strong>{user?.username}</strong></span>
-                    <button className='logout-btn' onClick={handleLogout}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
-                        Logout
-                    </button>
-                </div>
-            </nav>
+            <Navbar />
 
             {/* Page Header */}
             <header className='page-header'>
-                <h1>Create Your Custom <span className='highlight'>Interview Plan</span></h1>
-                <p>Let our AI analyze the job requirements and your unique profile to build a winning strategy.</p>
+                <h1 className='animate-title'>Create Your Custom <span className='highlight'>Interview Plan</span></h1>
+                <p className='animate-subtitle'>Let our AI analyze the job requirements and your unique profile to build a winning strategy.</p>
             </header>
 
             {/* Error Banner */}
@@ -90,7 +79,7 @@ const Home = () => {
             )}
 
             {/* Main Card */}
-            <div className='interview-card'>
+            <div className='interview-card glass-panel animate-card'>
                 <div className='interview-card__body'>
 
                     {/* Left Panel - Job Description */}
@@ -202,17 +191,32 @@ const Home = () => {
 
             {/* Recent Reports List */}
             {reports.length > 0 && (
-                <section className='recent-reports'>
-                    <h2>My Recent Interview Plans</h2>
-                    <ul className='reports-list'>
+                <section className='recent-reports animate-reports'>
+                    <h2 className='section-title'>My Recent Interview Plans</h2>
+                    <div className='reports-grid'>
                         {reports.map(report => (
-                            <li key={report._id} className='report-item' onClick={() => navigate(`/interview/${report._id}`)}>
-                                <h3>{report.title || 'Untitled Position'}</h3>
-                                <p className='report-meta'>Generated on {new Date(report.createdAt).toLocaleDateString()}</p>
-                                <p className={`match-score ${report.matchScore >= 80 ? 'score--high' : report.matchScore >= 60 ? 'score--mid' : 'score--low'}`}>Match Score: {report.matchScore}%</p>
-                            </li>
+                            <div key={report._id} className='report-card glass-panel' onClick={() => navigate(`/interview/${report._id}`)}>
+                                <div className='report-card__content'>
+                                    <h3>{report.title || 'Untitled Position'}</h3>
+                                    <p className='report-meta'>Generated on {new Date(report.createdAt).toLocaleDateString()}</p>
+                                </div>
+                                <div className={`report-card__score ${report.matchScore >= 80 ? 'score--high' : report.matchScore >= 60 ? 'score--mid' : 'score--low'}`}>
+                                    <span>{report.matchScore}%</span>
+                                    <small>Match</small>
+                                </div>
+                                <button
+                                    className="delete-report-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        deleteReport(report._id);
+                                    }}
+                                    title="Delete Report"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                </button>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </section>
             )}
 

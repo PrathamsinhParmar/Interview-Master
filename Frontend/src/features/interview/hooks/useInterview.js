@@ -1,4 +1,4 @@
-import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf } from "../services/interview.api"
+import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf, deleteInterviewReport } from "../services/interview.api"
 import { useContext, useEffect } from "react"
 import { InterviewContext } from "../interview.context.jsx"
 import { useParams } from "react-router"
@@ -13,21 +13,20 @@ export const useInterview = () => {
         throw new Error("useInterview must be used within an InterviewProvider")
     }
 
-    const { loading, setLoading, report, setReport, reports, setReports } = context
+    const { loading, setLoading, generating, setGenerating, report, setReport, reports, setReports } = context
 
     const generateReport = async ({ jobDescription, selfDescription, resumeFile }) => {
-        setLoading(true)
-        let response = null
+        setGenerating(true)
         try {
-            response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
+            const response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
             setReport(response.interviewReport)
+            return response.interviewReport
         } catch (error) {
-            console.log(error)
+            console.error("Failed to generate report:", error.response?.data || error)
+            return null
         } finally {
-            setLoading(false)
+            setGenerating(false)
         }
-
-        return response.interviewReport
     }
 
     const getReportById = async (interviewId) => {
@@ -78,7 +77,19 @@ export const useInterview = () => {
         }
     }
 
+    const deleteReport = async (interviewId) => {
+        // Optimistic UI — remove card instantly, re-fetch if API fails
+        setReports(prev => prev.filter(r => r._id !== interviewId))
+        try {
+            await deleteInterviewReport(interviewId)
+        } catch (error) {
+            console.error("Failed to delete report:", error.response?.data || error)
+            getReports() // restore on failure
+        }
+    }
+
     useEffect(() => {
+
         if (interviewId) {
             getReportById(interviewId)
         } else {
@@ -86,6 +97,6 @@ export const useInterview = () => {
         }
     }, [ interviewId ])
 
-    return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf }
+    return { loading, generating, report, reports, generateReport, getReportById, getReports, getResumePdf, deleteReport }
 
 }

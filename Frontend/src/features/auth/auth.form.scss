@@ -1,3 +1,14 @@
+$bg-page:        #0d1117;
+$bg-card:        #161b22;
+$bg-panel:       #1c2230;
+$bg-input:       #1e2535;
+$border-color:   #2a3348;
+$text-primary:   #e6edf3;
+$text-muted:     #7d8590;
+$accent:         #249E94;
+$accent-alt:     #3BC1A8;
+$gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, #3BC1A8 100%);
+
 /* Login and Register Global Container styles to break out of global dark mode */
 .login-container {
     display: flex;
@@ -7,8 +18,8 @@
     padding: 20px;
     position: relative;
     overflow: hidden;
-    background-color: #f7f7f9;
-    color: #111827;
+    background-color: $bg-page;
+    color: $text-primary;
     font-family: var(--font-family-base);
     
     /* Cover full viewport */
@@ -23,8 +34,8 @@
         right: 0;
         bottom: 0;
         background-image: 
-            linear-gradient(rgba(239, 68, 68, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
+            linear-gradient(rgba($accent, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba($accent, 0.05) 1px, transparent 1px);
         background-size: 40px 40px;
         background-position: center top;
         mask-image: radial-gradient(ellipse at top, black 0%, transparent 70%);
@@ -35,12 +46,13 @@
 }
 
 .login-card {
-    background: #ffffff;
+    background: $bg-card;
     width: 100%;
     max-width: 440px;
     border-radius: 24px;
     padding: 32px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid $border-color;
     position: relative;
     z-index: 1;
     overflow: hidden;
@@ -53,7 +65,7 @@
     transform: translateX(-50%);
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, rgba(239,68,68,0.08) 0%, rgba(255,255,255,0) 70%);
+    background: radial-gradient(circle, rgba($accent, 0.1) 0%, rgba(255,255,255,0) 70%);
     z-index: -1;
     pointer-events: none;
 }
@@ -65,8 +77,8 @@
     right: 0;
     bottom: 0;
     background-image: 
-        linear-gradient(rgba(239, 68, 68, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(239, 68, 68, 0.04) 1px, transparent 1px);
+        linear-gradient(rgba($accent, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba($accent, 0.05) 1px, transparent 1px);
     background-size: 32px 32px;
     background-position: center -16px;
     mask-image: radial-gradient(circle at top center, black 0%, transparent 60%);
@@ -84,12 +96,12 @@
 .logo {
     width: 56px;
     height: 56px;
-    background: linear-gradient(135deg, #f86b6b 0%, #e03232 100%);
+    background: $gradient-accent;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 8px 16px rgba(224, 50, 50, 0.25);
+    box-shadow: 0 8px 16px rgba($accent, 0.25);
 
     svg {
         width: 32px;
@@ -104,14 +116,14 @@
     h1 {
         font-size: 24px;
         font-weight: var(--font-weight-title-primary);
-        color: #111827;
+        color: $text-primary;
         margin-bottom: 4px;
         letter-spacing: -0.02em;
     }
 
     p {
         font-size: 14px;
-        color: #6b7280;
+        color: $text-muted;
     }
 }
 
@@ -124,8 +136,8 @@
 .social-btn {
     flex: 1;
     height: 44px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: $bg-panel;
+    border: 1px solid $border-color;
     border-radius: 8px;
     display: flex;
     justify-content: center;
@@ -134,8 +146,12 @@
     cursor: pointer;
 
     &:hover {
-        background: #f9fafb;
-        border-color: #d1d5db;
+        background: lighten($bg-panel, 5%);
+        border-color: lighten($border-color, 10%);
+    }
+
+    svg {
+        fill: $text-primary;
     }
 }
 
@@ -149,12 +165,12 @@
     &::after {
         content: '';
         flex: 1;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid $border-color;
     }
 
     span {
         padding: 0 16px;
-        color: #9ca3af;
+        color: $text-muted;
         font-size: 12px;
         font-weight: var(--font-weight-small);
         letter-spacing: 0.05em;
@@ -173,7 +189,7 @@
             display: block;
             font-size: 14px;
             font-weight: var(--font-weight-ui);
-            color: #111827;
+            color: $text-primary;
             margin-bottom: 6px;
             text-align: left;
         }
@@ -184,22 +200,22 @@
             width: 100%;
             height: 44px;
             padding: 0 16px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid $border-color;
             border-radius: 8px;
             font-size: 14px;
-            color: #111827;
-            background: #ffffff;
+            color: $text-primary;
+            background: $bg-input;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
             outline: none;
             box-sizing: border-box;
 
             &::placeholder {
-                color: #9ca3af;
+                color: $text-muted;
             }
 
             &:focus {
-                border-color: #e03232;
-                box-shadow: 0 0 0 3px rgba(224, 50, 50, 0.1);
+                border-color: $accent;
+                box-shadow: 0 0 0 3px rgba($accent, 0.15);
             }
         }
     }
@@ -215,7 +231,7 @@
         transform: translateY(-50%);
         background: none;
         border: none;
-        color: #9ca3af;
+        color: $text-muted;
         width: 20px;
         height: 20px;
         display: flex;
@@ -225,7 +241,7 @@
         cursor: pointer;
 
         &:hover {
-            color: #6b7280;
+            color: $text-primary;
         }
 
         svg {
@@ -256,8 +272,8 @@
             width: 0;
 
             &:checked ~ .checkmark {
-                background-color: #e03232;
-                border-color: #e03232;
+                background-color: $accent;
+                border-color: $accent;
 
                 &::after {
                     display: block;
@@ -268,8 +284,8 @@
         .checkmark {
             height: 18px;
             width: 18px;
-            background-color: #fff;
-            border: 1px solid #d1d5db;
+            background-color: $bg-input;
+            border: 1px solid $border-color;
             border-radius: 4px;
             display: flex;
             justify-content: center;
@@ -291,37 +307,41 @@
         .label-text {
             font-size: 14px;
             font-weight: var(--font-weight-ui);
-            color: #111827;
+            color: $text-primary;
         }
     }
 
     .forgot-password {
         font-size: 14px;
         font-weight: var(--font-weight-ui);
-        color: #6b7280;
+        color: $accent-alt;
         text-decoration: underline;
         text-underline-offset: 2px;
         transition: color 0.2s ease;
 
         &:hover {
-            color: #111827;
+            color: lighten($accent-alt, 10%);
         }
     }
 
     .submit-btn {
         width: 100%;
         height: 44px;
-        background: #1f2937;
+        background: $gradient-accent;
         color: #ffffff;
         border: none;
         border-radius: 8px;
         font-size: 15px;
         font-weight: var(--font-weight-ui);
-        transition: background 0.2s ease;
+        transition: opacity 0.2s ease, transform 0.1s;
         cursor: pointer;
 
         &:hover {
-            background: #111827;
+            opacity: 0.9;
+        }
+        
+        &:active {
+            transform: scale(0.98);
         }
     }
 }
@@ -332,11 +352,11 @@
 
     p {
         font-size: 14px;
-        color: #6b7280;
+        color: $text-muted;
     }
 
     a {
-        color: #111827;
+        color: $accent-alt;
         font-weight: var(--font-weight-title-secondary);
         text-decoration: none;
 

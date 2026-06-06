@@ -6,7 +6,9 @@ $bg-input: #1e2535;
 $border-color: #2a3348;
 $text-primary: #e6edf3;
 $text-muted: #7d8590;
-$accent: #ff2d78;
+$accent: #249E94;
+$accent-alt: #3BC1A8;
+$gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, #3BC1A8 100%);
 $font-stack: var(--font-family-base);
 
 // severity palette
@@ -29,80 +31,8 @@ $severity-low: #3fb950;
     flex-direction: column;
     padding: 1.5rem;
     box-sizing: border-box;
-    gap: 1rem;
+    gap: 3rem;
     align-items: center;
-
-    .app-navbar {
-        width: 100%;
-        max-width: 1280px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1rem 1.5rem;
-        background-color: $bg-card;
-        border: 1px solid $border-color;
-        border-radius: 0.75rem;
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            
-            .brand-icon {
-                color: $accent;
-                display: flex;
-                align-items: center;
-            }
-            .brand-name {
-                font-size: 1.15rem;
-                font-weight: 700;
-                letter-spacing: -0.02em;
-                .highlight {
-                    color: $accent;
-                }
-            }
-        }
-
-        .navbar-user {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-
-            .user-name {
-                font-size: 0.9rem;
-                color: $text-primary;
-                strong {
-                    color: lighten($accent, 15%);
-                }
-            }
-
-            .logout-btn {
-                display: flex;
-                align-items: center;
-                gap: 0.35rem;
-                background: transparent;
-                border: 1px solid $border-color;
-                border-radius: 0.5rem;
-                color: $text-muted;
-                padding: 0.4rem 0.8rem;
-                font-size: 0.85rem;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                outline: none;
-
-                &:hover {
-                    color: $text-primary;
-                    border-color: $accent;
-                    background-color: rgba($accent, 0.05);
-                }
-
-                svg {
-                    stroke-width: 2px;
-                }
-            }
-        }
-    }
 }
 
 // ── 3-Column Layout ───────────────────────────────────────────────────────────
@@ -289,6 +219,23 @@ $severity-low: #3fb950;
             transform: rotate(180deg);
             color: $accent;
         }
+    }
+
+    &__body-wrapper {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        opacity: 0;
+
+        &--open {
+            grid-template-rows: 1fr;
+            opacity: 1;
+        }
+    }
+
+    &__body-inner {
+        overflow: hidden;
+        min-height: 0;
     }
 
     &__body {
