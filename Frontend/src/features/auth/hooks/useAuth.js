@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { AuthContext } from "../auth.context";
+import { AuthContext } from "../auth.context.jsx";
 import { loginUser, registerUser, logoutUser, getUserData } from "../services/auth.api";
 
 // Create a hook
@@ -12,8 +12,9 @@ export const useAuth = ()=>{
         try {
             const data = await loginUser({email, password})
             setUser(data.user)
+            return { success: true }
         } catch (error) {
-            
+            return { success: false, error }
         }finally{
             setLoading(false)
         }
@@ -25,13 +26,14 @@ export const useAuth = ()=>{
         try {
             const data = await registerUser({username, email, password})
             setUser(data.user)
+            return { success: true }
         } catch (error) {
-            
+            return { success: false, error } 
         } finally{
             setLoading(false)
-        }    
+        }   
     }
-
+      
     const handleLogout = async ()=>{
         setLoading(true)
         try {
@@ -44,16 +46,6 @@ export const useAuth = ()=>{
         }       
     }
 
-    useEffect(()=>{
-        const getAndSetUser = async ()=>{
-            const data = await getUserData()
-            setUser(data.user)
-            setLoading(false)
-        }
-        
-        getAndSetUser()
-    }, [])
 
-
-    return { user, loading, handleLogin, handleRegister, handleLogout }
+    return { user, setUser, loading, setLoading, handleLogin, handleRegister, handleLogout }
 }

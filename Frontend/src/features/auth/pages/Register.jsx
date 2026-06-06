@@ -9,13 +9,19 @@ const Register = () => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [errorMsg, setErrorMsg] = useState("")
 
     const {loading, handleRegister} = useAuth()
 
     const handleSubmit = async (e)=>{
         e.preventDefault()
-        await handleRegister( { username, email, password })
-        navigate('/login')
+        setErrorMsg("")
+        const res = await handleRegister( { username, email, password })
+        if (res && !res.success) {
+            setErrorMsg(res.error)
+        } else {
+            navigate('/login')
+        }
     }
 
     if(loading){
@@ -31,6 +37,8 @@ const Register = () => {
       <main>
             <div className="form-container">
                 <h1>Register</h1>
+
+                {errorMsg && <div className="error-message" style={{color: 'red', marginBottom: '10px'}}>{errorMsg}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">

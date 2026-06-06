@@ -5,17 +5,23 @@ import { useAuth } from '../hooks/useAuth'
 
 const Login = () => {
 
-    const nevigate = useNavigate()
+    const navigate = useNavigate()
 
     const { loading, handleLogin } = useAuth()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [errorMsg, setErrorMsg] = useState("")
 
     const handleSubmit = async (e)=>{
         e.preventDefault()
-        await handleLogin({email, password})
-        nevigate('/')
+        setErrorMsg("")
+        const res = await handleLogin({email, password})
+        if (res && !res.success) {
+            setErrorMsg(res.error)
+        } else {
+            navigate('/')
+        }
     }
 
     if(loading){
@@ -31,6 +37,8 @@ const Login = () => {
         <main>
             <div className="form-container">
                 <h1>Login</h1>
+
+                {errorMsg && <div className="error-message" style={{color: 'red', marginBottom: '10px'}}>{errorMsg}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">

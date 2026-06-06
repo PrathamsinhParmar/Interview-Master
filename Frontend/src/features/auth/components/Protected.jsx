@@ -8,8 +8,8 @@ const Protected = ({children}) => {
 
     if(loading){
         return(
-            <main>
-                <h1>Loading...</h1>
+            <main style={{background: '#130f0f', color: 'white', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <h1>Loading Authentication...</h1>
             </main>
         )
     }

@@ -18,6 +18,7 @@ export async function registerUser({username, email, password}){
 
     } catch (error) {
         console.log("Error: ", error)
+        throw error.response?.data?.message || "Registration failed"
     }
 }
 
@@ -35,6 +36,7 @@ export async function loginUser({ username, email, password }){
 
     } catch (error) {
         console.log("Error: ", error)
+        throw error.response?.data?.message || "Login failed"
     }
 }
 

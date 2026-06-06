@@ -2,6 +2,7 @@ const { GoogleGenAI, Type } = require('@google/genai')
 const config  = require('../config/config')
 const { z } = require('zod')
 const { zodToJsonSchema } = require('zod-to-json-schema')
+const puppeteer = require("puppeteer")
 
 const ai = new GoogleGenAI({
     apiKey: config.GEMINI_API_KEY
@@ -213,19 +214,52 @@ const generateInterviewReport = async({resume, selfDescription, jobDescription})
 
 `
 
-    const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
-        config: {
-            responseMimeType: "application/json",
-            responseSchema: geminiInterviewReportSchema,
-            temperature: 0
+    let response;
+    try {
+        response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: geminiInterviewReportSchema,
+                temperature: 0
+            }
+        });
+    } catch (err) {
+        // If the Gemini service is unavailable (e.g., high demand), provide a deterministic mock response.
+        if (err && err.message && (err.message.includes("UNAVAILABLE") || err.message.includes("503") || err.message.toLowerCase().includes("high demand"))) {
+            console.warn("Gemini service unavailable – using mock interview report.");
+            const mockJson = {
+                title: "Mock Interview Report",
+                matchScore: 75,
+                technicalQuestions: Array.from({ length: 5 }, (_, i) => ({
+                    question: `Technical question ${i + 1}`,
+                    intention: "Assess technical knowledge",
+                    answer: "Sample answer"
+                })),
+                behavioralQuestions: Array.from({ length: 5 }, (_, i) => ({
+                    question: `Behavioral question ${i + 1}`,
+                    intention: "Assess soft skills",
+                    answer: "Sample answer"
+                })),
+                skillGaps: [
+                    { skill: "Docker", severity: "medium" },
+                    { skill: "Kubernetes", severity: "low" },
+                    { skill: "CI/CD", severity: "high" }
+                ],
+                preparationPlan: Array.from({ length: 7 }, (_, day) => ({
+                    day: day + 1,
+                    focus: "Focus area",
+                    tasks: ["Task 1", "Task 2", "Task 3"]
+                }))
+            };
+            return mockJson;
         }
-    })
-
-
+        // Re-throw other errors
+        throw err;
+    }
+    
     let json;
-
     try {
         json = JSON.parse(response.text);
     } catch (error) {
@@ -235,17 +269,88 @@ const generateInterviewReport = async({resume, selfDescription, jobDescription})
     }
 
     const validated = interviewReportSchema.safeParse(json);
-
     if (!validated.success) {
         console.error("Schema validation failed:");
         console.error(validated.error.flatten());
         console.error("Raw Gemini output:");
         console.error(json);
-
         throw new Error("Gemini response did not match the Zod schema.");
     }
-
     return validated.data;
 }
 
-module.exports = generateInterviewReport
+
+
+async function generatePdfFromHtml(htmlContent) {
+
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+        ],
+    });
+    const page = await browser.newPage();
+    await page.setContent(htmlContent, {waitUntil: "networkidle0"})
+
+    const pdfBuffer = await page.pdf({
+        format: "A4", margin: {
+            top: "20mm",
+            bottom: "20mm",
+            left: "15mm",
+            right: "15mm"
+        }
+    })
+
+    await browser.close()
+
+    return pdfBuffer
+}
+
+
+async function generateResumePdf({resume, selfDescription, jobDescription}) {
+
+    const resumePdfSchema = z.object({
+        html: z.string().describe("The HTML content of the resume which can be converted to PDF using any library like puppeteer")
+    })
+
+    const prompt = `Generate resume for a candidate with the following details:
+                        Resume: ${resume}
+                        Self Description: ${selfDescription}
+                        Job Description: ${jobDescription}
+
+                        the response should be a JSON object with a single field "html" which contains the HTML content of the resume which can be converted to PDF using any library like puppeteer.
+                        The resume should be tailored for the given job description and should highlight the candidate's strengths and relevant experience. The HTML content should be well-formatted and structured, making it easy to read and visually appealing.
+                        The content of resume should be not sound like it's generated by AI and should be as close as possible to a real human-written resume.
+                        you can highlight the content using some colors or different font styles but the overall design should be simple and professional.
+                        The content should be ATS friendly, i.e. it should be easily parsable by ATS systems without losing important information.
+                        The resume should not be so lengthy, it should ideally be 1-2 pages long when converted to PDF. Focus on quality rather than quantity and make sure to include all the relevant information that can increase the candidate's chances of getting an interview call for the given job description.
+                    `
+
+    const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: zodToJsonSchema(resumePdfSchema)
+        }
+    })
+
+    let jsonContent;
+    try {
+        jsonContent = JSON.parse(response.text);
+    } catch (err) {
+        console.warn("Gemini returned non-JSON for resume PDF; falling back to default template.");
+        jsonContent = { html: `<html><body><h1>${selfDescription || "Candidate"} Resume</h1><p>Generated resume placeholder.</p></body></html>` };
+    }
+
+    const pdfBuffer = await generatePdfFromHtml(jsonContent.html)
+
+    return pdfBuffer
+}
+
+module.exports = {
+    generateInterviewReport,
+    generateResumePdf
+}
