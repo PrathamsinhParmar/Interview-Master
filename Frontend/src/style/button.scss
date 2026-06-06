@@ -4,9 +4,11 @@
             border-radius: 3rem;
             cursor: pointer;
             font-size: 1rem;
-            outline: none;
+    outline: none;
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-ui);
             
-        transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
         &:active{
             transform: scale(1.02);
             

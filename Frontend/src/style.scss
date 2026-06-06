@@ -1,15 +1,64 @@
 @use "./style/button.scss";
 
-*{
+:root {
+  /* 1. Base Font Setup */
+  --font-family-base: "Mona Sans Variable", "Mona Sans", system-ui, -apple-system, sans-serif;
+
+  /* 2. Font Weight Distribution */
+  --font-weight-title-primary: 800; /* Primary titles (h1) */
+  --font-weight-title-secondary: 600; /* Secondary titles (h2-h3) */
+  --font-weight-body: 400; /* Body text */
+  --font-weight-ui: 500; /* UI components (buttons, labels, inputs) */
+  --font-weight-small: 300; /* Small text (captions, metadata) */
+}
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html, body, #root{
+html, body, #root {
     width: 100%;
     height: 100%;
     color: beige;
-    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
     background-color: rgb(19, 15, 15);
+    
+    /* 3. Global Application */
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-body);
+}
+
+/* Base Typographic Hierarchy */
+h1 {
+    font-weight: var(--font-weight-title-primary);
+}
+
+h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-title-secondary);
+}
+
+p, li, div, span, a {
+    font-weight: var(--font-weight-body);
+}
+
+small, .caption, .metadata {
+    font-weight: var(--font-weight-small);
+}
+
+/* Base UI Component Typographic Defaults */
+button, input, select, textarea, label {
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-ui);
+}
+
+/* Responsive Considerations */
+@media (max-width: 768px) {
+    /* Adjust typography for smaller screens if needed */
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
 }
