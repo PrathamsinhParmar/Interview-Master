@@ -126,7 +126,7 @@ $severity-low: #3fb950;
 
 // ── Left Nav ─────────────────────────────────────────────────────────────────
 .interview-nav {
-    width: 240px;
+    width: 250px;
     flex-shrink: 0;
     padding: 2rem 1.25rem;
     display: flex;
@@ -161,12 +161,31 @@ $severity-low: #3fb950;
         border-radius: 0.75rem;
         color: $text-muted;
         font-family: $font-stack;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 500;
         cursor: pointer;
         text-align: left;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba($accent, 0.15) 0%, transparent 100%);
+            border-left: 3px solid $accent;
+            border-radius: 0 0.75rem 0.75rem 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        & > span, & > svg {
+            position: relative;
+            z-index: 1;
+        }
 
         &:hover {
             color: $text-primary;
@@ -174,11 +193,13 @@ $severity-low: #3fb950;
         }
 
         &--active {
-            background: linear-gradient(90deg, rgba($accent, 0.15) 0%, transparent 100%);
-            border-left: 3px solid $accent;
-            border-radius: 0 0.75rem 0.75rem 0;
             color: $text-primary;
             font-weight: 600;
+            background: transparent;
+
+            &::before {
+                opacity: 1;
+            }
 
             .interview-nav__icon svg {
                 stroke: $accent;

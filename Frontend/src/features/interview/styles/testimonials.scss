@@ -1,0 +1,188 @@
+$bg-page: #0d1117;
+$bg-card: rgba(22, 27, 34, 0.7);
+$text-primary: #e6edf3;
+$text-muted: #8b949e;
+$accent: #249E94;
+$accent-alt: #3BC1A8;
+$border-color: rgba(255, 255, 255, 0.08);
+$font-stack: var(--font-family-base);
+
+.testimonials-page {
+    width: 100%;
+    min-height: 100vh;
+    background-color: $bg-page;
+    color: $text-primary;
+    font-family: $font-stack;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1.5rem 5rem;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+// Reuse the ambient orbs from interview
+.testimonials-bg-orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+
+    .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.15;
+        animation: orb-float 15s ease-in-out infinite;
+
+        &--1 {
+            width: 600px;
+            height: 600px;
+            background: $accent;
+            top: -100px;
+            left: -150px;
+            animation-duration: 20s;
+        }
+
+        &--2 {
+            width: 500px;
+            height: 500px;
+            background: $accent-alt;
+            bottom: -50px;
+            right: -100px;
+            animation-duration: 15s;
+            animation-direction: reverse;
+        }
+    }
+}
+
+.testimonials-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+    padding: 0 1.5rem;
+}
+
+.testimonials-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 600px;
+    margin: 2rem auto 4rem;
+
+    &__badge {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: $accent-alt;
+        background-color: rgba($accent, 0.1);
+        border: 1px solid rgba($accent, 0.25);
+        padding: 0.3rem 0.8rem;
+        border-radius: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    &__title {
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+        margin-top: 0;
+    }
+
+    &__subtitle {
+        font-size: 1.1rem;
+        color: $text-muted;
+        line-height: 1.6;
+        margin: 0;
+    }
+}
+
+// The layout grid
+.testimonials-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    height: 740px;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+
+    @media (max-width: 1024px) {
+        .col-3 { display: none; }
+    }
+
+    @media (max-width: 768px) {
+        .col-2 { display: none; }
+    }
+}
+
+.testimonials-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.testimonial-card {
+    background: $bg-card;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid $border-color;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    width: 320px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+
+    &:hover {
+        border-color: rgba($accent, 0.4);
+        transform: translateY(-2px);
+    }
+
+    &__text {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: rgba($text-primary, 0.9);
+    }
+
+    &__author {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    &__name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: $text-primary;
+    }
+
+    &__role {
+        font-size: 0.8rem;
+        color: $text-muted;
+    }
+}
