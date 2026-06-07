@@ -6,6 +6,7 @@ import Home from './features/interview/pages/Home.jsx'
 import Interview from './features/interview/pages/Interview.jsx'
 import Testimonials from './features/interview/pages/Testimonials.jsx'
 import Contact from './features/interview/pages/Contact.jsx'
+import About from './features/interview/pages/About.jsx'
 
 export const router = createBrowserRouter([
     {
@@ -31,5 +32,9 @@ export const router = createBrowserRouter([
     {
         path: "/contact",
         element: <Contact />
+    },
+    {
+        path: "/about",
+        element: <About />
     }
 ])
