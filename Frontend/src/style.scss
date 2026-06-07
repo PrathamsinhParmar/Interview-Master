@@ -4,12 +4,20 @@
   /* 1. Base Font Setup */
   --font-family-base: "Mona Sans Variable", "Mona Sans", system-ui, -apple-system, sans-serif;
 
-  /* 2. Font Weight Distribution */
-  --font-weight-title-primary: 800; /* Primary titles (h1) */
-  --font-weight-title-secondary: 600; /* Secondary titles (h2-h3) */
-  --font-weight-body: 400; /* Body text */
-  --font-weight-ui: 500; /* UI components (buttons, labels, inputs) */
-  --font-weight-small: 300; /* Small text (captions, metadata) */
+  /* 2. Font Weight Distribution — About-page editorial style */
+  --font-weight-title-primary: 500;   /* Primary titles (h1) — elegant, not heavy */
+  --font-weight-title-secondary: 500; /* Secondary titles (h2-h3) */
+  --font-weight-body: 300;            /* Body text — airy, light */
+  --font-weight-ui: 500;              /* UI components (buttons, labels, inputs) */
+  --font-weight-small: 300;           /* Small text (captions, metadata) */
+
+  /* 3. Letter Spacing */
+  --letter-spacing-title: -0.04em;
+  --letter-spacing-heading: -0.03em;
+
+  /* 4. Line Heights */
+  --line-height-title: 1.1;
+  --line-height-body: 1.7;
 }
 
 * {
@@ -21,24 +29,43 @@
 html, body, #root {
     width: 100%;
     height: 100%;
-    color: beige;
+    color: #ededed;
     background-color: rgb(19, 15, 15);
-    
+
     /* 3. Global Application */
     font-family: var(--font-family-base);
     font-weight: var(--font-weight-body);
+    line-height: var(--line-height-body);
 }
 
-/* Base Typographic Hierarchy */
+/* ── Base Typographic Hierarchy ─────────────────────────────── */
 h1 {
     font-weight: var(--font-weight-title-primary);
+    letter-spacing: var(--letter-spacing-title);
+    line-height: var(--line-height-title);
+    color: #ffffff;
 }
 
-h2, h3, h4, h5, h6 {
+h2 {
     font-weight: var(--font-weight-title-secondary);
+    letter-spacing: var(--letter-spacing-heading);
+    line-height: 1.2;
+    color: #ffffff;
 }
 
-p, li, div, span, a {
+h3, h4, h5, h6 {
+    font-weight: var(--font-weight-title-secondary);
+    letter-spacing: var(--letter-spacing-heading);
+    color: #ffffff;
+}
+
+p {
+    font-weight: var(--font-weight-body);
+    line-height: var(--line-height-body);
+    color: #a1a1aa;
+}
+
+li, div, span, a {
     font-weight: var(--font-weight-body);
 }
 
@@ -54,7 +81,6 @@ button, input, select, textarea, label {
 
 /* Responsive Considerations */
 @media (max-width: 768px) {
-    /* Adjust typography for smaller screens if needed */
     h1 {
         font-size: 2rem;
     }

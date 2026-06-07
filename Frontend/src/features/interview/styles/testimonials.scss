@@ -89,18 +89,19 @@ $font-stack: var(--font-family-base);
 
     &__title {
         font-size: 3rem;
-        font-weight: 800;
-        line-height: 1.2;
-        letter-spacing: -0.02em;
+        font-weight: 500;
+        line-height: 1.1;
+        letter-spacing: -0.04em;
         margin-bottom: 1rem;
         margin-top: 0;
     }
 
     &__subtitle {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         color: $text-muted;
-        line-height: 1.6;
+        line-height: 1.7;
         margin: 0;
+        font-weight: 300;
     }
 }
 

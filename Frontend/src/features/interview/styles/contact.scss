@@ -93,21 +93,21 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
     }
 
     &__title {
-        font-size: 2.5rem;
-        font-weight: 800;
-        line-height: 1.2;
-        letter-spacing: -0.02em;
+        font-size: 3rem;
+        font-weight: 500;
+        line-height: 1.1;
+        letter-spacing: -0.04em;
         color: #ffffff;
         margin: 0;
         animation-delay: 0.2s;
     }
 
     &__subtitle {
-        font-size: 1rem;
+        font-size: 1.05rem;
         color: $text-muted;
-        line-height: 1.6;
+        line-height: 1.7;
         margin: 0;
-        font-weight: 400;
+        font-weight: 300;
         animation-delay: 0.3s;
 
         a {

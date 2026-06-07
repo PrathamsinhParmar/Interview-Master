@@ -110,19 +110,21 @@ $font-stack:     var(--font-family-base, 'Inter', sans-serif);
 
     h1 {
         font-size: 3rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
+        font-weight: 500;
+        letter-spacing: -0.04em;
         margin-bottom: 0.75rem;
         color: #ffffff;
+        line-height: 1.1;
         text-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
 
     p {
         color: $text-muted;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         max-width: 550px;
         margin: 0 auto;
-        line-height: 1.6;
+        line-height: 1.7;
+        font-weight: 300;
     }
 
     .highlight {
