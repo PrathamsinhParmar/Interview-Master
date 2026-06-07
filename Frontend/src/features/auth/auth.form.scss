@@ -49,8 +49,8 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
     background: $bg-card;
     width: 100%;
     max-width: 440px;
-    border-radius: 24px;
-    padding: 32px;
+    border-radius: 20px;
+    padding: 24px 28px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
     border: 1px solid $border-color;
     position: relative;
@@ -90,12 +90,12 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
 .logo-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .logo {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     background: $gradient-accent;
     border-radius: 50%;
     display: flex;
@@ -104,14 +104,14 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
     box-shadow: 0 8px 16px rgba($accent, 0.25);
 
     svg {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
     }
 }
 
 .header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 
     h1 {
         font-size: 24px;
@@ -127,15 +127,35 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
     }
 }
 
+.error-container {
+    background-color: rgba(224, 50, 50, 0.1);
+    border: 1px solid rgba(224, 50, 50, 0.3);
+    color: #ff5c5c;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    
+    svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+}
+
 .social-providers {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .social-btn {
     flex: 1;
-    height: 44px;
+    height: 40px;
     background: $bg-panel;
     border: 1px solid $border-color;
     border-radius: 8px;
@@ -159,7 +179,7 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
     display: flex;
     align-items: center;
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 
     &::before,
     &::after {
@@ -183,14 +203,14 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
     flex-direction: column;
 
     .form-group {
-        margin-bottom: 16px;
+        margin-bottom: 12px;
 
         label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: var(--font-weight-ui);
             color: $text-primary;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             text-align: left;
         }
 
@@ -198,8 +218,8 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
         input[type="email"],
         input[type="password"] {
             width: 100%;
-            height: 44px;
-            padding: 0 16px;
+            height: 40px;
+            padding: 0 14px;
             border: 1px solid $border-color;
             border-radius: 8px;
             font-size: 14px;
@@ -254,7 +274,7 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
 
     .remember-me {
@@ -326,7 +346,7 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
 
     .submit-btn {
         width: 100%;
-        height: 44px;
+        height: 40px;
         background: $gradient-accent;
         color: #ffffff;
         border: none;
@@ -347,7 +367,7 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
 }
 
 .card-footer {
-    margin-top: 20px;
+    margin-top: 16px;
     text-align: center;
 
     p {
