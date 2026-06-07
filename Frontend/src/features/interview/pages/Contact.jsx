@@ -1,6 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Navbar from '../../../components/Navbar.jsx';
+import GlobePulse from '../../../components/GlobePulse.jsx';
 import '../styles/contact.scss';
+
+const countries = [
+    { name: 'India', code: 'IN', dial: '+91', flag: '🇮🇳' },
+    { name: 'United States', code: 'US', dial: '+1', flag: '🇺🇸' },
+    { name: 'United Kingdom', code: 'GB', dial: '+44', flag: '🇬🇧' },
+    { name: 'Canada', code: 'CA', dial: '+1', flag: '🇨🇦' },
+    { name: 'Australia', code: 'AU', dial: '+61', flag: '🇦🇺' },
+    { name: 'Germany', code: 'DE', dial: '+49', flag: '🇩🇪' },
+    { name: 'France', code: 'FR', dial: '+33', flag: '🇫🇷' },
+    { name: 'Japan', code: 'JP', dial: '+81', flag: '🇯🇵' },
+    { name: 'China', code: 'CN', dial: '+86', flag: '🇨🇳' },
+    { name: 'Brazil', code: 'BR', dial: '+55', flag: '🇧🇷' },
+    { name: 'South Korea', code: 'KR', dial: '+82', flag: '🇰🇷' },
+    { name: 'Singapore', code: 'SG', dial: '+65', flag: '🇸🇬' },
+    { name: 'UAE', code: 'AE', dial: '+971', flag: '🇦🇪' },
+    { name: 'Saudi Arabia', code: 'SA', dial: '+966', flag: '🇸🇦' },
+    { name: 'Netherlands', code: 'NL', dial: '+31', flag: '🇳🇱' },
+    { name: 'Italy', code: 'IT', dial: '+39', flag: '🇮🇹' },
+    { name: 'Spain', code: 'ES', dial: '+34', flag: '🇪🇸' },
+    { name: 'Russia', code: 'RU', dial: '+7', flag: '🇷🇺' },
+    { name: 'Mexico', code: 'MX', dial: '+52', flag: '🇲🇽' },
+    { name: 'South Africa', code: 'ZA', dial: '+27', flag: '🇿🇦' },
+    { name: 'Nigeria', code: 'NG', dial: '+234', flag: '🇳🇬' },
+    { name: 'Pakistan', code: 'PK', dial: '+92', flag: '🇵🇰' },
+    { name: 'Bangladesh', code: 'BD', dial: '+880', flag: '🇧🇩' },
+    { name: 'Indonesia', code: 'ID', dial: '+62', flag: '🇮🇩' },
+    { name: 'Thailand', code: 'TH', dial: '+66', flag: '🇹🇭' },
+    { name: 'Malaysia', code: 'MY', dial: '+60', flag: '🇲🇾' },
+    { name: 'New Zealand', code: 'NZ', dial: '+64', flag: '🇳🇿' },
+    { name: 'Sweden', code: 'SE', dial: '+46', flag: '🇸🇪' },
+    { name: 'Switzerland', code: 'CH', dial: '+41', flag: '🇨🇭' },
+    { name: 'Ireland', code: 'IE', dial: '+353', flag: '🇮🇪' },
+];
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -10,6 +44,27 @@ const Contact = () => {
         message: ''
     });
     const [privacyAccepted, setPrivacyAccepted] = useState(true);
+    const [selectedCountry, setSelectedCountry] = useState(countries[0]);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setShowDropdown(false);
+                setSearchQuery('');
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const filteredCountries = countries.filter(c =>
+        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.dial.includes(searchQuery) ||
+        c.code.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -40,6 +95,9 @@ const Contact = () => {
                     <p className="contact-info__subtitle">
                         Or just reach out manually to <a href="mailto:hello@slothui.com">hello@slothui.com.</a>
                     </p>
+                    <div className="contact-info__globe">
+                        <GlobePulse />
+                    </div>
                 </section>
 
                 {/* Right Side: Form */}
@@ -79,10 +137,46 @@ const Contact = () => {
                     <div className="form-group">
                         <label className="form-group__label" htmlFor="phone">Phone Number</label>
                         <div className="form-group__input-wrap form-group__input-wrap--phone">
-                            <div className="phone-prefix">
-                                <span className="flag">🇬🇧</span>
-                                <svg className="chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                <span className="code">+44</span>
+                            <div className="phone-prefix" ref={dropdownRef}>
+                                <div className="phone-prefix__selected" onClick={() => setShowDropdown(!showDropdown)}>
+                                    <span className="flag">{selectedCountry.flag}</span>
+                                    <svg className="chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    <span className="code">{selectedCountry.dial}</span>
+                                </div>
+
+                                {showDropdown && (
+                                    <div className="phone-dropdown">
+                                        <div className="phone-dropdown__search">
+                                            <input
+                                                type="text"
+                                                placeholder="Search country..."
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                autoFocus
+                                            />
+                                        </div>
+                                        <ul className="phone-dropdown__list">
+                                            {filteredCountries.map(c => (
+                                                <li
+                                                    key={c.code}
+                                                    className={`phone-dropdown__item ${c.code === selectedCountry.code ? 'phone-dropdown__item--active' : ''}`}
+                                                    onClick={() => {
+                                                        setSelectedCountry(c);
+                                                        setShowDropdown(false);
+                                                        setSearchQuery('');
+                                                    }}
+                                                >
+                                                    <span className="phone-dropdown__flag">{c.flag}</span>
+                                                    <span className="phone-dropdown__name">{c.name}</span>
+                                                    <span className="phone-dropdown__dial">{c.dial}</span>
+                                                </li>
+                                            ))}
+                                            {filteredCountries.length === 0 && (
+                                                <li className="phone-dropdown__empty">No results found</li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                             <input 
                                 type="text" 
