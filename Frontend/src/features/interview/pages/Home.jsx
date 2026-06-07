@@ -5,6 +5,7 @@ import { useAuth } from '../../auth/hooks/useAuth.js'
 import '../styles/home.scss'
 import Navbar from '../../../components/Navbar.jsx'
 import Loader from '../../../components/Loader.jsx'
+import Footer from '../../../components/Footer.jsx'
 
 const Home = () => {
 
@@ -221,11 +222,7 @@ const Home = () => {
             )}
 
             {/* Page Footer */}
-            <footer className='page-footer'>
-                <a href='#'>Privacy Policy</a>
-                <a href='#'>Terms of Service</a>
-                <a href='#'>Help Center</a>
-            </footer>
+            <Footer />
         </div>
     )
 }

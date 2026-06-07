@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Navbar from '../../../components/Navbar.jsx';
 import GlobePulse from '../../../components/GlobePulse.jsx';
+import Footer from '../../../components/Footer.jsx';
 import '../styles/contact.scss';
 
 const countries = [
@@ -222,6 +223,7 @@ const Contact = () => {
                     </button>
                 </form>
             </main>
+            <Footer />
         </div>
     );
 };

@@ -1,7 +1,8 @@
 import React from 'react'
 import { motion } from "motion/react"
 import { TestimonialsColumn } from '../components/TestimonialsColumn'
-import Navbar from '../../../components/Navbar'
+import Navbar from '../../../components/Navbar.jsx'
+import Footer from '../../../components/Footer.jsx'
 import '../styles/testimonials.scss'
 
 const testimonials = [
@@ -97,6 +98,7 @@ const Testimonials = () => {
           <TestimonialsColumn className="col-3" testimonials={thirdColumn} duration={17} />
         </div>
       </div>
+      <Footer />
     </div>
   )
 }

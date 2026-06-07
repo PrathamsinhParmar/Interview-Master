@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router'
 import { useAuth } from '../../auth/hooks/useAuth.js'
 import Navbar from '../../../components/Navbar.jsx'
 import Loader from '../../../components/Loader.jsx'
+import Footer from '../../../components/Footer.jsx'
 
 
 
@@ -223,6 +224,7 @@ const Interview = () => {
 
                 </aside>
             </div>
+            <Footer />
         </div>
     )
 }

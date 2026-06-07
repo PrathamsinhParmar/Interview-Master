@@ -3,6 +3,7 @@ import "../auth.form.scss"
 import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth'
 import Loader from '../../../components/Loader'
+import Footer from '../../../components/Footer.jsx'
 
 const Login = () => {
 
@@ -154,6 +155,7 @@ const Login = () => {
                 <p>Don't have an account yet? <Link to="/register">Sign Up</Link></p>
             </div>
         </div>
+        <Footer />
     </div>
   )
 }

@@ -33,7 +33,7 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
     font-family: $font-stack;
     position: relative;
     overflow-x: hidden;
-    padding-bottom: 8rem;
+    padding-bottom: 0;
 }
 
 // ── Mesh Background ───────────────────────────

@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../../../components/Navbar.jsx';
 import AnimatedCardDemo from '../../../components/AnimatedCard.jsx';
+import Footer from '../../../components/Footer.jsx';
 import '../styles/about.scss';
 
 const About = () => {
@@ -147,6 +148,7 @@ const About = () => {
                 </section>
 
             </main>
+            <Footer />
         </div>
     );
 };
