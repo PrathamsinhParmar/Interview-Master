@@ -89,6 +89,12 @@ const Interview = () => {
             {/* App Navbar */}
             <Navbar />
 
+            {/* Ambient Animated Orbs */}
+            <div className="interview-bg-orbs">
+                <div className="orb orb--1"></div>
+                <div className="orb orb--2"></div>
+            </div>
+
             <div className='interview-layout'>
 
                 {/* ── Left Nav ── */}
@@ -182,11 +188,23 @@ const Interview = () => {
                     {/* Match Score */}
                     <div className='match-score'>
                         <p className='match-score__label'>Match Score</p>
-                        <div className={`match-score__ring ${scoreColor}`}>
-                            <span className='match-score__value'>{report.matchScore}</span>
-                            <span className='match-score__pct'>%</span>
+                        <div className={`match-score__chart ${scoreColor}`}>
+                            <svg>
+                                <circle className="bg" cx="60" cy="60" r="40" />
+                                <circle 
+                                    className="progress" 
+                                    cx="60" cy="60" r="40" 
+                                    style={{ '--target-offset': 251.2 - (251.2 * report.matchScore) / 100 }} 
+                                />
+                            </svg>
+                            <div className="match-score__value-container">
+                                <span className='match-score__value'>{report.matchScore}</span>
+                                <span className='match-score__pct'>%</span>
+                            </div>
                         </div>
-                        <p className='match-score__sub'>Strong match for this role</p>
+                        <p className='match-score__sub' style={{color: scoreColor === 'score--high' ? '#3fb950' : scoreColor === 'score--mid' ? '#f5a623' : '#ff4d4d'}}>
+                            {scoreColor === 'score--high' ? 'Strong match for this role' : scoreColor === 'score--mid' ? 'Good match for this role' : 'Needs improvement'}
+                        </p>
                     </div>
 
                     <div className='sidebar-divider' />
