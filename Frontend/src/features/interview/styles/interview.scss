@@ -107,7 +107,7 @@ $severity-low: #3fb950;
     z-index: 1;
     display: flex;
     width: 100%;
-    max-width: 1280px;
+    max-width: 1440px;
     margin: 0 auto;
     background: $bg-card;
     backdrop-filter: blur(20px);
@@ -120,6 +120,7 @@ $severity-low: #3fb950;
 
     @media (max-width: 992px) {
         flex-direction: column;
+        border-radius: 0.75rem;
     }
 }
 
@@ -131,7 +132,7 @@ $severity-low: #3fb950;
 
 // ── Left Nav ─────────────────────────────────────────────────────────────────
 .interview-nav {
-    width: 250px;
+    width: 220px;
     flex-shrink: 0;
     padding: 2rem 1.25rem;
     display: flex;
@@ -232,6 +233,7 @@ $severity-low: #3fb950;
 // ── Center Content ────────────────────────────────────────────────────────────
 .interview-content {
     flex: 1;
+    min-width: 0;
     padding: 2.5rem;
     overflow-y: auto;
     min-height: initial;
@@ -242,6 +244,17 @@ $severity-low: #3fb950;
     section {
         min-height: 100%;
         animation: fade-in 0.4s ease forwards;
+    }
+
+    @media (max-width: 992px) {
+        max-height: none;
+        padding: 1.5rem;
+        padding-bottom: 3rem;
+    }
+
+    @media (max-width: 576px) {
+        padding: 1rem;
+        padding-bottom: 2rem;
     }
 }
 
@@ -518,7 +531,7 @@ $severity-low: #3fb950;
 
 // ── Right Sidebar ─────────────────────────────────────────────────────────────
 .interview-sidebar {
-    width: 260px;
+    width: 220px;
     flex-shrink: 0;
     padding: 2.5rem 1.5rem;
     display: flex;

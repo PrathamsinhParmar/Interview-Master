@@ -1,0 +1,22 @@
+{
+  "name": "Interview Master",
+  "short_name": "Interview Master",
+  "description": "AI-powered interview preparation platform. Get personalized technical & behavioral questions, match scores, skill gap analysis, and a 7-day roadmap — all tailored to your resume and target role.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#249E94",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}
