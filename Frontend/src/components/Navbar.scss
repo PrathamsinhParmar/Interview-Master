@@ -225,10 +225,10 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
     bottom: 0;
     width: 280px;
     max-width: 80vw;
-    background: rgba(13, 17, 23, 0.85);
+    background: linear-gradient(135deg, rgba(36, 158, 148, 0.15) 0%, rgba(13, 17, 23, 0.95) 100%);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 1px solid rgba(36, 158, 148, 0.2);
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -239,9 +239,44 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
 
     &.open {
         transform: translateX(0);
+
+        .mobile-links .mobile-nav-link {
+            opacity: 1;
+            transform: translateX(0);
+            
+            &:nth-child(1) { transition-delay: 0.1s; }
+            &:nth-child(2) { transition-delay: 0.15s; }
+            &:nth-child(3) { transition-delay: 0.2s; }
+            &:nth-child(4) { transition-delay: 0.25s; }
+
+            &:hover, &.active {
+                transform: translateX(5px);
+                transition-delay: 0s; // Remove delay on hover
+            }
+        }
     }
 
+    .mobile-close-btn {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        background: transparent;
+        border: none;
+        color: $text-muted;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
 
+        &:hover {
+            color: $text-primary;
+            background: rgba(36, 158, 148, 0.2);
+            transform: rotate(90deg);
+        }
+    }
 
     .mobile-links {
         display: flex;
@@ -254,12 +289,13 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
             text-decoration: none;
             font-size: 1.3rem;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             transform-origin: left;
+            opacity: 0;
+            transform: translateX(20px);
 
             &:hover, &.active {
                 color: $text-primary;
-                transform: translateX(5px);
             }
         }
     }
