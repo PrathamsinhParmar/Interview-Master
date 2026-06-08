@@ -1,6 +1,7 @@
 const express = require('express')
 const authRouter = require('./routes/auth.routes')
 const interviewRouter = require('./routes/interview.routes')
+const contactRouter = require('./routes/contact.routes')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 
@@ -17,7 +18,7 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.trycloudflare.com')) {
             callback(null, true)
         } else {
             callback(new Error('Not allowed by CORS'))
@@ -38,5 +39,11 @@ app.use('/api/auth', authRouter)
  * @description Interview Routes
  */
 app.use('/api/interview', interviewRouter)
+
+/**
+ * @route POST /api/contact
+ * @description Contact Form Routes
+ */
+app.use('/api/contact', contactRouter)
 
 module.exports = app

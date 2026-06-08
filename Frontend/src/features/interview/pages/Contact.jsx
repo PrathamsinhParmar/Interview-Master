@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import Navbar from '../../../components/Navbar.jsx';
 import GlobePulse from '../../../components/GlobePulse.jsx';
 import Footer from '../../../components/Footer.jsx';
@@ -48,6 +49,9 @@ const Contact = () => {
     const [selectedCountry, setSelectedCountry] = useState(countries[0]);
     const [showDropdown, setShowDropdown] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null);
+    const [submitMessage, setSubmitMessage] = useState('');
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -76,9 +80,44 @@ const Contact = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle submit
+        
+        if (!privacyAccepted) {
+            setSubmitStatus('error');
+            setSubmitMessage('Please accept the privacy policy.');
+            return;
+        }
+
+        if (!formData.name || !formData.email || !formData.message) {
+            setSubmitStatus('error');
+            setSubmitMessage('Please fill in all required fields (Name, Email, Message).');
+            return;
+        }
+
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+        setSubmitMessage('');
+
+        try {
+            const response = await axios.post('http://localhost:3000/api/contact/submit', {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone ? `${selectedCountry.dial} ${formData.phone}` : undefined,
+                message: formData.message
+            });
+
+            if (response.data.success) {
+                setSubmitStatus('success');
+                setSubmitMessage(response.data.message || 'Your message has been sent successfully.');
+                setFormData({ name: '', email: '', phone: '', message: '' });
+            }
+        } catch (error) {
+            setSubmitStatus('error');
+            setSubmitMessage(error.response?.data?.message || 'An error occurred while sending your message.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -218,8 +257,14 @@ const Contact = () => {
                         </span>
                     </div>
 
-                    <button type="submit" className="submit-btn">
-                        Submit Form <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    {submitMessage && (
+                        <div className={`submit-message ${submitStatus === 'success' ? 'submit-message--success' : 'submit-message--error'}`} style={{ padding: '10px', borderRadius: '5px', marginTop: '10px', marginBottom: '10px', backgroundColor: submitStatus === 'success' ? '#10b98122' : '#ef444422', color: submitStatus === 'success' ? '#10b981' : '#ef4444', border: `1px solid ${submitStatus === 'success' ? '#10b981' : '#ef4444'}` }}>
+                            {submitMessage}
+                        </div>
+                    )}
+
+                    <button type="submit" className="submit-btn" disabled={isSubmitting} style={{ opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}>
+                        {isSubmitting ? 'Sending...' : 'Submit Form'} {!isSubmitting && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>}
                     </button>
                 </form>
             </main>

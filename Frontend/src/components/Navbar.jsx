@@ -15,6 +15,11 @@ const Navbar = () => {
         setIsMobileMenuOpen(false);
     }, [location]);
 
+    const handleLogoutClick = async () => {
+        await handleLogout();
+        navigate('/login');
+    };
+
     // Add scrolled state for subtle background changes when scrolled
     useEffect(() => {
         const handleScroll = () => {
@@ -65,7 +70,7 @@ const Navbar = () => {
 
                 <div className="navbar-actions desktop-only">
                     {user && <span className="user-name">Hello, <strong>{user.username}</strong></span>}
-                    <button className="logout-cta" onClick={handleLogout}>
+                    <button className="logout-cta" onClick={handleLogoutClick}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
                         Logout
                     </button>
@@ -82,34 +87,43 @@ const Navbar = () => {
                     <span className="bar"></span>
                 </button>
 
-                {/* Mobile Menu Overlay */}
-                <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
-                    <div className="mobile-links">
-                        {navLinks.map((link, index) => (
-                            <a 
-                                key={index} 
-                                href={link.path}
-                                className={`mobile-nav-link ${location.pathname === link.path ? 'active' : ''}`}
-                                onClick={(e) => {
-                                    if (link.path.startsWith('/')) {
-                                        e.preventDefault();
-                                        navigate(link.path);
-                                    }
-                                }}
-                            >
-                                {link.label}
-                            </a>
-                        ))}
-                    </div>
-                    <div className="mobile-actions">
-                        {user && <span className="mobile-user-name">Hello, <strong>{user.username}</strong></span>}
-                        <button className="mobile-logout-cta" onClick={handleLogout}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
-                            Logout
-                        </button>
-                    </div>
-                </div>
             </nav>
+
+            {/* Mobile Menu Overlay for Click-Outside-to-Close */}
+            <div 
+                className={`mobile-overlay ${isMobileMenuOpen ? 'open' : ''} mobile-only`}
+                onClick={() => setIsMobileMenuOpen(false)}
+            ></div>
+
+            {/* Mobile Menu Drawer */}
+            <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+
+
+                <div className="mobile-links">
+                    {navLinks.map((link, index) => (
+                        <a 
+                            key={index} 
+                            href={link.path}
+                            className={`mobile-nav-link ${location.pathname === link.path ? 'active' : ''}`}
+                            onClick={(e) => {
+                                if (link.path.startsWith('/')) {
+                                    e.preventDefault();
+                                    navigate(link.path);
+                                }
+                            }}
+                        >
+                            {link.label}
+                        </a>
+                    ))}
+                </div>
+                <div className="mobile-actions">
+                    {user && <span className="mobile-user-name">Hello, <strong>{user.username}</strong></span>}
+                    <button className="mobile-logout-cta" onClick={handleLogoutClick}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                        Logout
+                    </button>
+                </div>
+            </div>
         </header>
     );
 };

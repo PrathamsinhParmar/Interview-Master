@@ -80,11 +80,32 @@ button, input, select, textarea, label {
 }
 
 /* Responsive Considerations */
+@media (max-width: 992px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+    }
+}
+
 @media (max-width: 768px) {
     h1 {
         font-size: 2rem;
     }
     h2 {
         font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.75rem;
+    }
+    h2 {
+        font-size: 1.3rem;
+    }
+    p {
+        font-size: 0.95rem;
     }
 }

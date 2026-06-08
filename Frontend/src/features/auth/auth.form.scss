@@ -1,3 +1,4 @@
+@use "sass:color";
 $bg-page:        #0d1117;
 $bg-card:        #161b22;
 $bg-panel:       #1c2230;
@@ -166,8 +167,8 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
     cursor: pointer;
 
     &:hover {
-        background: lighten($bg-panel, 5%);
-        border-color: lighten($border-color, 10%);
+        background: color.adjust($bg-panel, $lightness: 5%);
+        border-color: color.adjust($border-color, $lightness: 10%);
     }
 
     svg {
@@ -340,7 +341,7 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
         transition: color 0.2s ease;
 
         &:hover {
-            color: lighten($accent-alt, 10%);
+            color: color.adjust($accent-alt, $lightness: 10%);
         }
     }
 
@@ -388,7 +389,14 @@ $gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, 
 }
 
 @media (max-width: 480px) {
+    .login-container {
+        padding: 16px;
+    }
     .login-card {
-        padding: 24px 20px;
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+    .header h1 {
+        font-size: 20px;
     }
 }

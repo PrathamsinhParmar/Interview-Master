@@ -1,10 +1,11 @@
+@use "sass:color";
 // Shared Variables (matches app theme)
 $bg-page: #0d1117;
 $bg-panel: #1c2230;
 $text-primary: #e6edf3;
 $text-muted: #7d8590;
 $accent: #249E94;
-$gradient-accent: linear-gradient(135deg, #005461 0%, #0C7779 33%, #249E94 66%, #3BC1A8 100%);
+$gradient-accent: linear-gradient(135deg, #249E94 0%, #3BC1A8 100%);
 $font-stack: var(--font-family-base, 'Inter', sans-serif);
 
 // Navbar Wrapper (Sticky positioning)
@@ -13,7 +14,7 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
     top: 1rem;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 9999;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -127,7 +128,7 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
         color: $text-primary;
 
         strong {
-            color: lighten($accent, 15%);
+            color: color.adjust($accent, $lightness: 15%);
         }
     }
 
@@ -177,7 +178,7 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
         height: 2px;
         background-color: $text-primary;
         border-radius: 2px;
-        transition: all 0.3s ease;
+        transition: all 0.6s ease;
         transform-origin: left center;
     }
 
@@ -195,30 +196,52 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
     }
 }
 
-// Mobile Menu Overlay
-.mobile-menu {
+// Click-Outside Overlay
+.mobile-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(13, 17, 23, 0.95);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    padding: 6rem 2rem 2rem;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 999;
     opacity: 0;
     pointer-events: none;
-    transform: translateY(-20px);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.4s ease;
 
     &.open {
         opacity: 1;
         pointer-events: auto;
-        transform: translateY(0);
     }
+}
+
+// Mobile Menu Drawer
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 80vw;
+    background: rgba(13, 17, 23, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    padding: 5rem 2rem 2rem;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+
+    &.open {
+        transform: translateX(0);
+    }
+
+
 
     .mobile-links {
         display: flex;
@@ -229,12 +252,14 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
         .mobile-nav-link {
             color: $text-muted;
             text-decoration: none;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            transform-origin: left;
 
             &:hover, &.active {
                 color: $text-primary;
+                transform: translateX(5px);
             }
         }
     }
@@ -248,7 +273,7 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
         .mobile-user-name {
             font-size: 1.1rem;
             color: $text-primary;
-            strong { color: lighten($accent, 15%); }
+            strong { color: color.adjust($accent, $lightness: 15%); }
         }
 
         .mobile-logout-cta {
@@ -256,15 +281,21 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            background: $gradient-accent;
-            border: none;
-            border-radius: 30px;
-            color: white;
+            background: rgba($accent, 0.1);
+            border: 1px solid rgba($accent, 0.3);
+            border-radius: 12px;
+            color: $accent;
             padding: 1rem;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba($accent, 0.3);
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: $accent;
+                color: white;
+                box-shadow: 0 4px 15px rgba($accent, 0.3);
+            }
         }
     }
 }
@@ -293,5 +324,21 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
     
     .mobile-only {
         display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-wrapper {
+        padding: 0 0.5rem;
+    }
+    .glass-navbar {
+        padding: 0 1rem;
+        height: 60px;
+    }
+    .navbar-brand .brand-name {
+        font-size: 1.05rem;
+    }
+    .mobile-menu {
+        padding: 5rem 1.5rem 1.5rem;
     }
 }

@@ -1,3 +1,4 @@
+@use "sass:color";
 // ── Shared Variables ────────────────────────────────
 $bg-page: #0d1117;
 $bg-card: rgba(22, 27, 34, 0.7);
@@ -116,6 +117,10 @@ $severity-low: #3fb950;
     justify-content: space-between;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+    @media (max-width: 992px) {
+        flex-direction: column;
+    }
 }
 
 .interview-divider {
@@ -133,6 +138,11 @@ $severity-low: #3fb950;
     flex-direction: column;
     justify-content: space-between;
     gap: 2rem;
+
+    @media (max-width: 992px) {
+        width: 100%;
+        padding: 1.5rem;
+    }
 
     .nav-content {
         display: flex;
@@ -514,6 +524,11 @@ $severity-low: #3fb950;
     display: flex;
     flex-direction: column;
     gap: 2rem;
+
+    @media (max-width: 992px) {
+        width: 100%;
+        padding: 1.5rem;
+    }
 }
 
 .sidebar-divider {
@@ -642,21 +657,21 @@ $severity-low: #3fb950;
     }
 
     &--high {
-        color: lighten($severity-high, 10%);
+        color: color.adjust($severity-high, $lightness: 10%);
         background-color: rgba($severity-high, 0.1);
         border-color: rgba($severity-high, 0.3);
         &:hover { box-shadow: 0 4px 12px rgba($severity-high, 0.2); }
     }
 
     &--medium {
-        color: lighten($severity-medium, 10%);
+        color: color.adjust($severity-medium, $lightness: 10%);
         background-color: rgba($severity-medium, 0.1);
         border-color: rgba($severity-medium, 0.3);
         &:hover { box-shadow: 0 4px 12px rgba($severity-medium, 0.2); }
     }
 
     &--low {
-        color: lighten($severity-low, 10%);
+        color: color.adjust($severity-low, $lightness: 10%);
         background-color: rgba($severity-low, 0.1);
         border-color: rgba($severity-low, 0.3);
         &:hover { box-shadow: 0 4px 12px rgba($severity-low, 0.2); }

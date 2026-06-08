@@ -1,3 +1,4 @@
+@use "sass:color";
 // ── Loader Variables ──────────────────────────────────────────────────────────
 $accent:      #249E94;
 $accent-alt:  #3BC1A8;
@@ -275,7 +276,7 @@ $text-muted:   #8b949e;
     }
 
     &--done {
-        color: lighten($text-muted, 10%);
+        color: color.adjust($text-muted, $lightness: 10%);
 
         .loader-step__icon {
             background: rgba($accent, 0.15);
