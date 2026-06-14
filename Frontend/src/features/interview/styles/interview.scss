@@ -63,6 +63,11 @@ $severity-low: #3fb950;
     align-items: center;
     position: relative;
     overflow: hidden;
+
+    @media (max-width: 768px) {
+        padding: 1rem 1rem 0;
+        gap: 1.5rem;
+    }
 }
 
 // ── Ambient Background ────────────────────────────────────────────────────────
@@ -143,6 +148,11 @@ $severity-low: #3fb950;
     @media (max-width: 992px) {
         width: 100%;
         padding: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+        gap: 1rem;
     }
 
     .nav-content {
@@ -252,7 +262,7 @@ $severity-low: #3fb950;
         padding-bottom: 3rem;
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 768px) {
         padding: 1rem;
         padding-bottom: 2rem;
     }

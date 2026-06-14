@@ -54,14 +54,23 @@
     gap: 2rem;
     user-select: none;
 
+    @media (max-width: 768px) {
+        gap: 0.5rem;
+    }
+
     // ── Sphere ────────────────────────────────────────────────────────────────
     &__sphere-wrap {
         position: relative;
-        width: 280px;
+        width: 180px;
         height: 180px;
         display: flex;
         align-items: center;
         justify-content: center;
+
+        @media (max-width: 768px) {
+            width: 220px;
+            height: 110px;
+        }
 
         // Soft ambient glow behind sphere
         &::before {
@@ -78,6 +87,11 @@
         width: 220px;
         height: 220px;
         border-radius: 50%;
+
+        @media (max-width: 768px) {
+            width: 140px;
+            height: 140px;
+        }
         animation: ai-loader-rotate 4s linear infinite;
         // Initial box-shadow handled by keyframe
         box-shadow:
@@ -124,6 +138,10 @@
         font-family: var(--font-family-base, 'Inter', sans-serif);
         color: #fff;
         letter-spacing: 0.02em;
+
+        @media (max-width: 768px) {
+            font-size: 1.25rem;
+        }
         animation: ai-loader-letter 1.5s ease-in-out infinite;
         // Individual delays applied inline in JSX
     }
