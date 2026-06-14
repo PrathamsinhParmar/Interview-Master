@@ -7,7 +7,7 @@ import '../styles/testimonials.scss'
 
 const testimonials = [
   {
-    text: "Interview Master's AI perfectly simulated the pressure of a real technical interview. It helped me land my dream role at Google!",
+    text: "Nexviva's AI perfectly simulated the pressure of a real technical interview. It helped me land my dream role at Google!",
     image: "https://randomuser.me/api/portraits/women/1.jpg",
     name: "Briana Patton",
     role: "Software Engineer",
@@ -55,7 +55,7 @@ const testimonials = [
     role: "Database Administrator",
   },
   {
-    text: "As a new grad, I had no idea what to expect. Interview Master prepared me for everything from HR screens to deep technical rounds.",
+    text: "As a new grad, I had no idea what to expect. Nexviva prepared me for everything from HR screens to deep technical rounds.",
     image: "https://randomuser.me/api/portraits/men/9.jpg",
     name: "Hassan Ali",
     role: "Junior Developer",
@@ -88,7 +88,7 @@ const Testimonials = () => {
             What our users say
           </h2>
           <p className="testimonials-header__subtitle">
-            Discover how Interview Master is helping candidates worldwide conquer their interview anxiety and land their dream jobs.
+            Discover how Nexviva is helping candidates worldwide conquer their interview anxiety and land their dream jobs.
           </p>
         </motion.div>
 

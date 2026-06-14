@@ -514,6 +514,118 @@ $font-stack:     var(--font-family-base, 'Inter', sans-serif);
     }
 }
 
+// ── Mock Interview CTA Banner ─────────────────────────────────────────────────
+.mock-interview-cta {
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    border: 1px solid rgba(36, 158, 148, 0.2);
+    background: linear-gradient(135deg, rgba(36, 158, 148, 0.06) 0%, rgba(22, 27, 34, 0.5) 100%);
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(36, 158, 148, 0.1) 0%, transparent 60%);
+        opacity: 0;
+        transition: opacity 0.35s ease;
+    }
+
+    &:hover {
+        transform: translateY(-4px);
+        border-color: rgba(36, 158, 148, 0.5);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(36, 158, 148, 0.12);
+
+        &::before { opacity: 1; }
+
+        .mock-cta__icon {
+            transform: scale(1.1);
+            background: rgba(36, 158, 148, 0.2);
+        }
+    }
+
+    .mock-cta__icon {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        border-radius: 1rem;
+        background: rgba(36, 158, 148, 0.1);
+        border: 1px solid rgba(36, 158, 148, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $accent-alt;
+        transition: all 0.35s ease;
+        z-index: 1;
+    }
+
+    .mock-cta__content {
+        flex: 1;
+        z-index: 1;
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 0.3rem 0;
+            letter-spacing: -0.01em;
+        }
+
+        p {
+            font-size: 0.875rem;
+            color: $text-muted;
+            margin: 0;
+            line-height: 1.5;
+        }
+    }
+
+    .mock-cta__action {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-shrink: 0;
+        color: $accent;
+        z-index: 1;
+    }
+
+    .mock-cta__badge {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0.25rem 0.65rem;
+        border-radius: 2rem;
+        background: rgba(36, 158, 148, 0.15);
+        border: 1px solid rgba(36, 158, 148, 0.35);
+        color: $accent-alt;
+        white-space: nowrap;
+
+        &::before {
+            content: '● ';
+            font-size: 0.55rem;
+            vertical-align: middle;
+            animation: pulseGlow 1.5s infinite;
+        }
+    }
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+
+        .mock-cta__action {
+            align-self: flex-end;
+        }
+    }
+}
+
 // ── Recent Reports ────────────────────────────────────────────────────────────
 .recent-reports {
     width: 100%;

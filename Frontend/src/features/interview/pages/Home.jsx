@@ -190,6 +190,28 @@ const Home = () => {
                 </div>
             </div>
 
+            {/* Mock Interview CTA Banner */}
+            <div className='mock-interview-cta glass-panel animate-card' onClick={() => navigate('/mock-interview')}>
+                <div className='mock-cta__icon'>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </div>
+                <div className='mock-cta__content'>
+                    <h3>Practice with AI Mock Interview</h3>
+                    <p>Sit down with Alex, your AI interviewer. Answer real questions, get scored, and receive detailed feedback on your performance.</p>
+                </div>
+                <div className='mock-cta__action'>
+                    <span className='mock-cta__badge'>Live AI</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </div>
+
             {/* Recent Reports List */}
             {reports.length > 0 && (
                 <section className='recent-reports animate-reports'>

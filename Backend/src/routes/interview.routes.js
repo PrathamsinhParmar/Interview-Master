@@ -37,6 +37,23 @@ interviewRouter.get("/", authMiddleware.authUserMiddleware, interviewController.
  */
 interviewRouter.post("/resume/pdf/:interviewReportId", authMiddleware.authUserMiddleware, interviewController.generateResumePdfController)
 
+
+/**
+ * @route POST /api/interview/mock/start
+ * @description Start a new live mock interview session. Accepts resume PDF + job setup.
+ * @access private
+ */
+interviewRouter.post("/mock/start", authMiddleware.authUserMiddleware, upload.single("resume"), interviewController.startMockInterviewController)
+
+
+/**
+ * @route POST /api/interview/mock/chat
+ * @description Send a user's message/answer during an ongoing mock interview session.
+ * @access private
+ */
+interviewRouter.post("/mock/chat", authMiddleware.authUserMiddleware, interviewController.mockInterviewChatController)
+
+
 /**
  * @route DELETE /api/interview/:interviewId
  * @description delete an interview report by id.

@@ -98,12 +98,13 @@
 
   .footer-info {
     .footer-logo {
-      font-size: 1.8rem;
       margin-bottom: 1rem;
-      font-weight: var(--font-weight-title-primary);
-      
-      .highlight {
-        color: #249E94;
+
+      .footer-brand-logo {
+        height: 35px;
+        width: auto;
+        object-fit: contain;
+        mix-blend-mode: screen;
       }
     }
 
@@ -182,6 +183,21 @@
         svg {
           color: #249E94;
           flex-shrink: 0;
+        }
+
+        .contact-link {
+          color: inherit;
+          text-decoration: none;
+          transition: color 0.3s ease, text-decoration-color 0.3s ease;
+
+          &:hover {
+            color: #249E94;
+            text-decoration-color: rgba(36, 158, 148, 0.6);
+          }
+
+          &:visited {
+            color: inherit;
+          }
         }
 
         &:hover {

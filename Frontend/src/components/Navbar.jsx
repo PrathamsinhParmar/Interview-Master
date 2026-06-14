@@ -35,6 +35,7 @@ const Navbar = () => {
 
     const navLinks = [
         { label: 'Home', path: '/' },
+        { label: 'Mock Interview', path: '/mock-interview' },
         { label: 'About', path: '/about' },
         { label: 'Testimonials', path: '/testimonials' },
         { label: 'Contact', path: '/contact' }
@@ -44,10 +45,11 @@ const Navbar = () => {
         <header className={`navbar-wrapper ${scrolled ? 'scrolled' : ''}`}>
             <nav className="glass-navbar">
                 <div className="navbar-brand" onClick={() => navigate('/')}>
-                    <span className="brand-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    </span>
-                    <span className="brand-name">Interview <span className="highlight">Master</span></span>
+                    <img 
+                        src="/Nexviva Logo.png" 
+                        alt="Nexviva" 
+                        className="brand-logo"
+                    />
                 </div>
 
                 <div className="navbar-links desktop-only">

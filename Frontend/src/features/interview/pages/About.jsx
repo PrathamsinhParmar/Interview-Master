@@ -129,7 +129,7 @@ const About = () => {
                 <section className="milestones-section text-center">
                     <h2 className="section-heading">Team Expertise & Milestones</h2>
                     <p className="milestones-section__desc">
-                        Interview Master is engineered by a specialized team of full-stack developers, AI researchers, and former technical recruiters. We bridge the gap between complex machine learning architectures and intuitive UX design.
+                        Nexviva is engineered by a specialized team of full-stack developers, AI researchers, and former technical recruiters. We bridge the gap between complex machine learning architectures and intuitive UX design.
                     </p>
                     <div className="stats-grid">
                         <div className="stat-card">

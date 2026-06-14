@@ -7,6 +7,7 @@ import Interview from './features/interview/pages/Interview.jsx'
 import Testimonials from './features/interview/pages/Testimonials.jsx'
 import Contact from './features/interview/pages/Contact.jsx'
 import About from './features/interview/pages/About.jsx'
+import MockInterview from './features/interview/pages/MockInterview.jsx'
 
 export const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
         element: <Protected><Interview /></Protected>
     },
     {
+        path: "/mock-interview",
+        element: <Protected><MockInterview /></Protected>
+    },
+    {
         path: "/testimonials",
         element: <Testimonials />
     },
@@ -37,4 +42,4 @@ export const router = createBrowserRouter([
         path: "/about",
         element: <About />
     }
-])
+])

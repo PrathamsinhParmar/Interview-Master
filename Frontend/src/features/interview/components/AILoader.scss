@@ -1,0 +1,130 @@
+// ── AI Loader Animation ───────────────────────────────────────────────────────
+// Theme colours:  accent #249E94  |  accent-alt #3BC1A8  |  dark #005461
+
+@keyframes ai-loader-rotate {
+    0% {
+        transform: rotate(90deg);
+        box-shadow:
+            0 10px 20px 0 #fff inset,
+            0 20px 30px 0 #3BC1A8 inset,
+            0 60px 60px 0 #005461 inset;
+    }
+    50% {
+        transform: rotate(270deg);
+        box-shadow:
+            0 10px 20px 0 #fff inset,
+            0 20px 10px 0 #249E94 inset,
+            0 40px 60px 0 #0C7779 inset;
+    }
+    100% {
+        transform: rotate(450deg);
+        box-shadow:
+            0 10px 20px 0 #fff inset,
+            0 20px 30px 0 #3BC1A8 inset,
+            0 60px 60px 0 #005461 inset;
+    }
+}
+
+@keyframes ai-loader-letter {
+    0%, 100% {
+        opacity: 0.35;
+        transform: translateY(0);
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1.18) translateY(-4px);
+        color: #3BC1A8;
+    }
+    40% {
+        opacity: 0.7;
+        transform: translateY(0);
+    }
+}
+
+@keyframes ai-loader-glow-pulse {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50%       { opacity: 0.65; transform: scale(1.12); }
+}
+
+.ai-loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    user-select: none;
+
+    // ── Sphere ────────────────────────────────────────────────────────────────
+    &__sphere-wrap {
+        position: relative;
+        width: 280px;
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        // Soft ambient glow behind sphere
+        &::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(36,158,148,0.25) 0%, transparent 70%);
+            animation: ai-loader-glow-pulse 3s ease-in-out infinite;
+        }
+    }
+
+    &__sphere {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        animation: ai-loader-rotate 4s linear infinite;
+        // Initial box-shadow handled by keyframe
+        box-shadow:
+            0 10px 20px 0 #fff inset,
+            0 20px 30px 0 #3BC1A8 inset,
+            0 60px 60px 0 #005461 inset;
+        position: relative;
+        z-index: 2;
+
+        // Thin ring overlay
+        &::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(59, 193, 168, 0.25);
+        }
+    }
+
+    // ── Intensified state when AI is speaking ─────────────────────────────────
+    &--speaking {
+        .ai-loader__sphere {
+            animation-duration: 2s; // faster rotation
+        }
+        .ai-loader__sphere-wrap::before {
+            opacity: 1;
+            background: radial-gradient(circle, rgba(36,158,148,0.45) 0%, transparent 70%);
+        }
+        .ai-loader__letter {
+            animation-duration: 0.6s;
+        }
+    }
+
+    // ── Letters ───────────────────────────────────────────────────────────────
+    &__letters {
+        display: flex;
+        gap: 2px;
+        align-items: center;
+    }
+
+    &__letter {
+        font-size: 2rem;
+        font-weight: 600;
+        font-family: var(--font-family-base, 'Inter', sans-serif);
+        color: #fff;
+        letter-spacing: 0.02em;
+        animation: ai-loader-letter 1.5s ease-in-out infinite;
+        // Individual delays applied inline in JSX
+    }
+}

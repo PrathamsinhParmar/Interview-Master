@@ -11,6 +11,31 @@ const ai = new GoogleGenAI({
 
 
 // Zod schema for backend validation
+
+/**
+ * Helper to retry a function with exponential backoff if it hits a rate limit or 503 error.
+ */
+async function withRetry(fn, maxRetries = 3, baseDelay = 1000) {
+    let attempt = 0;
+    while (attempt < maxRetries) {
+        try {
+            return await fn();
+        } catch (error) {
+            attempt++;
+            const errMsg = error?.message?.toLowerCase() || '';
+            const isRateLimitOrUnavailable = errMsg.includes('429') || errMsg.includes('rate limit') || errMsg.includes('503') || errMsg.includes('unavailable') || errMsg.includes('high demand');
+            
+            if (isRateLimitOrUnavailable && attempt < maxRetries) {
+                const delay = baseDelay * (2 ** (attempt - 1));
+                console.warn(`Gemini API rate limited or unavailable. Retrying in ${delay}ms... (Attempt ${attempt} of ${maxRetries})`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            } else {
+                throw error;
+            }
+        }
+    }
+}
+
 const interviewReportSchema = z
     .object({
 
@@ -216,7 +241,7 @@ const generateInterviewReport = async({resume, selfDescription, jobDescription})
 
     let response;
     try {
-        response = await ai.models.generateContent({
+        response = await withRetry(() => ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
             config: {
@@ -224,7 +249,7 @@ const generateInterviewReport = async({resume, selfDescription, jobDescription})
                 responseSchema: geminiInterviewReportSchema,
                 temperature: 0
             }
-        });
+        }));
     } catch (err) {
         // If the Gemini service is unavailable (e.g., high demand), provide a deterministic mock response.
         if (err && err.message && (err.message.includes("UNAVAILABLE") || err.message.includes("503") || err.message.toLowerCase().includes("high demand"))) {
@@ -328,14 +353,14 @@ async function generateResumePdf({resume, selfDescription, jobDescription}) {
                         The resume should not be so lengthy, it should ideally be 1-2 pages long when converted to PDF. Focus on quality rather than quantity and make sure to include all the relevant information that can increase the candidate's chances of getting an interview call for the given job description.
                     `
 
-    const response = await ai.models.generateContent({
+    const response = await withRetry(() => ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
             responseSchema: zodToJsonSchema(resumePdfSchema)
         }
-    })
+    }));
 
     let jsonContent;
     try {
@@ -350,7 +375,119 @@ async function generateResumePdf({resume, selfDescription, jobDescription}) {
     return pdfBuffer
 }
 
+/**
+ * @description Conducts one turn of a live mock interview conversation using Gemini.
+ * The frontend maintains the chatHistory and sends it on every request.
+ *
+ * @param {Object} params
+ * @param {string} params.resumeText       - Extracted text from the user's resume PDF
+ * @param {string} params.jobRole          - Target job role specified by the user
+ * @param {string} params.experienceLevel  - e.g. "Junior", "Mid", "Senior"
+ * @param {string} params.interviewFocus   - "Technical", "Behavioral", or "Mixed"
+ * @param {Array}  params.chatHistory      - [{role: "user"|"model", parts: [{text}]}]
+ * @param {string} params.userMessage      - The latest message from the user
+ * @returns {Object} { aiReply, isFinished, scorecard? }
+ */
+async function mockInterviewChat({ resumeText, jobRole, experienceLevel, interviewFocus, chatHistory, userMessage }) {
+
+    const SYSTEM_PROMPT = `You are Alex, a senior technical recruiter and strict but fair mock interviewer at a top tech company.
+
+Your task is to conduct a realistic mock interview for the role of "${jobRole}" (${experienceLevel} level, focus: ${interviewFocus}).
+
+---
+CANDIDATE RESUME:
+${resumeText || "No resume provided."}
+---
+
+VOICE PROFILE:
+- Tone: Professional yet encouraging, conversational but focused, authoritative but not condescending.
+- Formality: Business casual. Natural, modern professional language.
+- Vocabulary: Clear and accessible, using industry-standard terminology appropriate for the role.
+- Sentence Structure: Concise, direct, and easy to follow.
+- Personality: Empathetic, analytical, observant, and structured.
+
+PRINCIPLES FOR VOICE CONSISTENCY:
+- Avoid abrupt tone shifts: Maintain the "senior recruiter" persona consistently; do not become overly casual or excessively robotic.
+- Consistent detail level: Keep acknowledgments brief (1 sentence) and move directly to the next question. Do not over-explain or ramble.
+- Steady technical depth: Ensure all questions strictly align with the "${experienceLevel}" level.
+- Character continuity: Never break character, never say "As an AI...", and remain professional even if the candidate struggles.
+
+MANDATORY RESPONSE FORMAT FOR EACH TURN:
+You must structure every single response exactly like this:
+[Brief, 1-sentence professional acknowledgment of their answer]
+[Your next clear, concise interview question]
+
+RULES YOU MUST FOLLOW:
+1. Start by greeting the candidate warmly and asking the FIRST interview question immediately.
+2. Ask ONE question at a time. Wait for the candidate's answer before asking the next one.
+3. Ask exactly 5 interview questions total across the entire session. Keep track of how many you've asked.
+4. After the candidate answers each question, follow the MANDATORY RESPONSE FORMAT.
+5. Only ask questions relevant to the job role and the candidate's resume. Do NOT invent skills they don't have.
+6. After the 5th answer, say something like "That wraps up our interview! Let me prepare your scorecard..." and then OUTPUT THE SCORECARD (see below).
+7. If the candidate explicitly says "end interview" or "stop the interview" at any point, skip to the scorecard immediately.
+8. NEVER ask more than 5 questions. NEVER break character.
+
+SCORECARD FORMAT (output this ONLY after all 5 questions are answered):
+After the 5th answer, output a valid JSON block — and ONLY the JSON block — wrapped in <SCORECARD> tags, like this:
+
+<SCORECARD>
+{
+  "overallScore": 78,
+  "grade": "B+",
+  "strengths": ["Clear communication", "Strong React knowledge"],
+  "weaknesses": ["Weak on system design", "Didn't mention testing"],
+  "questionBreakdown": [
+    {
+      "question": "Tell me about yourself",
+      "userAnswer": "...",
+      "score": 80,
+      "feedback": "Good introduction but could be more concise.",
+      "idealAnswer": "A 1-2 minute pitch covering role, skills, and career goal."
+    }
+  ],
+  "overallFeedback": "You showed good technical depth but struggled with behavioral questions. Focus on the STAR method."
+}
+</SCORECARD>
+`
+
+    const chat = ai.chats.create({
+        model: 'gemini-2.5-flash',
+        config: {
+            systemInstruction: SYSTEM_PROMPT,
+            temperature: 0.2,
+        },
+        history: chatHistory || [],
+    })
+
+    const response = await withRetry(() => chat.sendMessage({ message: userMessage }))
+    const aiReply = response.text
+
+    // Detect if the AI has returned the final scorecard
+    const scorecardMatch = aiReply.match(/<SCORECARD>([\s\S]*?)<\/SCORECARD>/)
+    if (scorecardMatch) {
+        let scorecard = null
+        try {
+            scorecard = JSON.parse(scorecardMatch[1].trim())
+        } catch (e) {
+            console.error("Failed to parse scorecard JSON:", e.message)
+        }
+        return {
+            aiReply: aiReply.replace(/<SCORECARD>[\s\S]*?<\/SCORECARD>/, '').trim(),
+            isFinished: true,
+            scorecard,
+        }
+    }
+
+    return {
+        aiReply,
+        isFinished: false,
+        scorecard: null,
+    }
+}
+
+
 module.exports = {
     generateInterviewReport,
-    generateResumePdf
+    generateResumePdf,
+    mockInterviewChat,
 }

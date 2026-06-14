@@ -32,7 +32,7 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
 // Glassmorphism Pill-shaped Navbar
 .glass-navbar {
     width: 100%;
-    max-width: 900px;
+    max-width: 1000px;
     height: 64px;
     border-radius: 50px;
     background: rgba(22, 27, 34, 0.5); // semi-transparent background
@@ -53,28 +53,18 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
 .navbar-brand {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     cursor: pointer;
-    z-index: 1001; // Keep above mobile menu
+    z-index: 1001;
 
-    .brand-icon {
-        color: $accent;
-        display: flex;
-        align-items: center;
-    }
+    .brand-logo {
+        height: 27px;
+        width: auto;
+        object-fit: contain;
+        mix-blend-mode: screen;
+        transition: opacity 0.2s ease;
 
-    .brand-name {
-        font-size: 1.15rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        color: $text-primary;
-
-        .highlight {
-            background: $gradient-accent;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
+        &:hover {
+            opacity: 0.85;
         }
     }
 }
@@ -83,7 +73,7 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
 .navbar-links {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 2.5rem;
 
     .nav-link {
         color: $text-muted;

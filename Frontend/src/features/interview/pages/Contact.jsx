@@ -133,7 +133,7 @@ const Contact = () => {
                     <div className="contact-info__badge">Contact Us</div>
                     <h1 className="contact-info__title">Let's Get In Touch.</h1>
                     <p className="contact-info__subtitle">
-                        Or just reach out manually to <a href="mailto:hello@slothui.com">prathamgj2@gmail.com</a>
+                        Or just reach out manually to <a href="mailto:prathamgj2@gmail.com">prathamgj2@gmail.com</a>
                     </p>
                     <div className="contact-info__globe">
                         <GlobePulse />
