@@ -185,7 +185,7 @@ function SetupScreen({ onStart }) {
                         </>
                     ) : (
                         <>
-                            🎙️ Start Interview with Alex
+                            Start Interview with Alex
                         </>
                     )}
                 </button>

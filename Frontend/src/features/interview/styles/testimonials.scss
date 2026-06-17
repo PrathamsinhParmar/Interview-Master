@@ -20,6 +20,11 @@ $font-stack: var(--font-family-base);
     gap: 1.5rem;
     position: relative;
     overflow: hidden;
+
+    @media (max-width: 768px) {
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 // Reuse the ambient orbs from interview

@@ -83,6 +83,9 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
         position: relative;
         padding: 0.5rem 0;
         transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
 
         &::after {
             content: '';
@@ -104,6 +107,18 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
                 width: 100%;
             }
         }
+    }
+
+    .nav-lock-icon {
+        display: inline-flex;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        color: $text-muted;
+    }
+
+    .nav-link--protected:hover .nav-lock-icon {
+        opacity: 0.5;
     }
 }
 
@@ -146,6 +161,48 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
 
         svg {
             stroke-width: 2.5px;
+        }
+    }
+
+    // Guest state: Login button (ghost)
+    .login-cta {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 25px;
+        color: $text-muted;
+        padding: 0.5rem 1.2rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        outline: none;
+
+        &:hover {
+            border-color: rgba($accent, 0.4);
+            color: $text-primary;
+            background: rgba(255, 255, 255, 0.05);
+        }
+    }
+
+    // Guest state: Get Started button (filled)
+    .register-cta {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: linear-gradient(135deg, #249E94 0%, #3BC1A8 100%);
+        border: none;
+        border-radius: 25px;
+        color: #fff;
+        padding: 0.5rem 1.2rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        outline: none;
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba($accent, 0.4);
         }
     }
 }
@@ -293,7 +350,7 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
     .mobile-actions {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1rem;
         margin-top: auto;
 
         .mobile-user-name {
@@ -321,6 +378,50 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
                 background: $accent;
                 color: white;
                 box-shadow: 0 4px 15px rgba($accent, 0.3);
+            }
+        }
+
+        // Guest state: mobile Login (ghost)
+        .mobile-login-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: $text-muted;
+            padding: 0.9rem 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                border-color: rgba($accent, 0.4);
+                color: $text-primary;
+                background: rgba(255, 255, 255, 0.05);
+            }
+        }
+
+        // Guest state: mobile Get Started (filled)
+        .mobile-register-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #249E94 0%, #3BC1A8 100%);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                box-shadow: 0 6px 20px rgba($accent, 0.4);
+                transform: translateY(-1px);
             }
         }
     }

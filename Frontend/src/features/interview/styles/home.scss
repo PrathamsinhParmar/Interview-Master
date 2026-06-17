@@ -87,6 +87,11 @@ $font-stack:     var(--font-family-base, 'Inter', sans-serif);
     padding: 2rem 1.5rem 0;
     gap: 1.5rem;
 
+    @media (max-width: 768px) {
+        padding-left: 0.8rem;
+        padding-right: 0.8rem;
+    }
+
     * {
         z-index: 1; // Keep content above background
     }
@@ -297,6 +302,12 @@ $font-stack:     var(--font-family-base, 'Inter', sans-serif);
 
     &--left {
         position: relative;
+
+        @media (max-width: 768px) {
+            .panel__textarea {
+                min-height: 250px;
+            }
+        }
 
         .char-counter {
             position: absolute;

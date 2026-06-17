@@ -92,7 +92,7 @@ const Home = () => {
                             <h2>Target Job Description</h2>
                             <span className='badge badge--required'>Required</span>
                         </div>
-                        <textarea
+                        <textarea 
                             onChange={(e) => { setJobDescription(e.target.value) }}
                             className='panel__textarea'
                             placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}

@@ -34,7 +34,6 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
     position: relative;
     overflow-x: hidden;
     padding-bottom: 0;
-}
 
 // ── Mesh Background ───────────────────────────
 .about-bg {
@@ -427,4 +426,5 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
         font-weight: 600;
         margin-top: 0.5rem;
     }
+}
 }
