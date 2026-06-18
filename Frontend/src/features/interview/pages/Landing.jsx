@@ -1,9 +1,11 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../auth/hooks/useAuth.js';
 import GlslHills from '../../../components/GlslHills.jsx';
 import Navbar from '../../../components/Navbar.jsx';
 import Footer from '../../../components/Footer.jsx';
+import FAQ from '../../../components/ui/FAQ.jsx';
 import '../styles/landing.scss';
 
 // ── Icon helpers ──────────────────────────────────────────────────────────────
@@ -63,21 +65,21 @@ const steps = [
     { title: 'Practice with Mock Interview', desc: 'Drill with Alex, our AI interviewer, until you can answer every question with confidence.' },
 ];
 
-// ── Display Cards data ────────────────────────────────────────────────────────
-const displayCardsData = [
-    { icon: <BrainIcon />,   title: "Job Analysis",      desc: "Analyze job descriptions to uncover required skills and responsibilities in seconds.", date: "Step 1" },
-    { icon: <FileIcon />,    title: "Resume Parsing",    desc: "Extract key details and align your profile with job positions.",   date: "Step 2" },
-    { icon: <ZapIcon />,     title: "Strategy Plan",     desc: "Generate questions, roadmaps and personalized topics for focused preparation.",    date: "Step 3" },
-    { icon: <MicIcon />,     title: "Mock Interview",    desc: "Experience realistic interview simulations powered by AI.",date: "Step 4" },
-    { icon: <CheckIcon />,   title: "Detailed Feedback", desc: "Receive detailed evaluation matric and feedback to boost your interview skills.", date: "Step 5" },
+// ── Step Cards data for vertical marquee ─────────────────────────────────────
+const stepCards = [
+    { emoji: '🟢', title: 'Job Analysis',      desc: 'Analyze any job description to identify the required skills, qualifications, and responsibilities. Instantly understand what employers are looking for so you can prepare more effectively.',  step: 'Step 1' },
+    { emoji: '🔴', title: 'Resume Parsing',    desc: 'Upload your resume and let AI extract your skills, experience, and achievements. Compare your profile with the target role to identify strengths and areas for improvement.',           step: 'Step 2' },
+    { emoji: '🔵',  title: 'Strategy Plan',     desc: 'Receive a personalized questions and preparation roadmap based on your resume and job requirements. Focus on the most relevant topics and build the skills needed to succeed.',   step: 'Step 3' },
+    { emoji: '🟠', title: 'Mock Interview',    desc: 'Practice realistic interview questions with an AI-powered interviewer. Improve your confidence, communication, and problem-solving skills through interactive interview sessions.',     step: 'Step 4' },
+    { emoji: '⚪', title: 'Detailed Feedback', desc: 'Get comprehensive feedback on your interview performance, including communication, technical knowledge, and confidence. Receive AI-generated scores and actionable suggestions to improve before your next interview.',           step: 'Step 5' },
 ];
 
 // ── Stats ─────────────────────────────────────────────────────────────────────
 const stats = [
-    { value: '5,000+',  label: 'Interviews Prepared' },
-    { value: '98%',     label: 'Candidate Satisfaction' },
-    { value: '<30s',    label: 'Strategy Generation' },
-    { value: '3×',      label: 'Higher Offer Rate' },
+    { value: '3×',      label: 'More appointments booked by AI' },
+    { value: '+25%',    label: 'Enrollment growth in 60 days' },
+    { value: '<30s',    label: 'First response to every lead' },
+    { value: '18h/wk',  label: 'Manual work removed per client' },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -122,7 +124,7 @@ const Landing = () => {
 
                 {/* GLSL Hills canvas — self-positions absolutely to fill .hero-canvas-wrapper */}
                 <div className="hero-canvas-wrapper" aria-hidden="true">
-                    <GlslHills speed={0.45} cameraZ={125} planeSize={256} />
+                    <GlslHills speed={0.35} cameraZ={125} planeSize={265} />
                 </div>
 
                 {/* Vignette overlay for readability */}
@@ -215,17 +217,32 @@ const Landing = () => {
                     </div>
 
                     <div className="how-visual" aria-hidden="true">
-                        <div className="display-cards-container">
-                            {displayCardsData.map((card, i) => (
-                                <div className={`display-card card-${i}`} key={i}>
-                                    <div className="card-header">
-                                        <div className="card-icon">{card.icon}</div>
-                                        <h4 className="card-title">{card.title}</h4>
-                                    </div>
-                                    <p className="card-desc">{card.desc}</p>
-                                    <p className="card-date">{card.date}</p>
-                                </div>
-                            ))}
+                        <div className="how-marquee-wrapper">
+                            <motion.div
+                                animate={{ translateY: '-50%' }}
+                                transition={{
+                                    duration: 12,
+                                    repeat: Infinity,
+                                    ease: 'linear',
+                                    repeatType: 'loop',
+                                }}
+                                className="how-marquee-col"
+                            >
+                                {[...Array(2)].fill(0).map((_, dupIdx) => (
+                                    <React.Fragment key={dupIdx}>
+                                        {stepCards.map((card, i) => (
+                                            <div className="how-step-card" key={i}>
+                                                <div className="how-step-card__top">
+                                                    <div className="how-step-card__emoji">{card.emoji}</div>
+                                                    <span className="how-step-card__step">{card.step}</span>
+                                                </div>
+                                                <h4 className="how-step-card__title">{card.title}</h4>
+                                                <p className="how-step-card__desc">{card.desc}</p>
+                                            </div>
+                                        ))}
+                                    </React.Fragment>
+                                ))}
+                            </motion.div>
                         </div>
                     </div>
                 </div>
@@ -234,14 +251,40 @@ const Landing = () => {
             {/* ── Stats ─────────────────────────────────────────────────────── */}
             <section className="stats-section" aria-label="Statistics">
                 <div className="stats-inner">
-                    {stats.map((s, i) => (
-                        <div className="stat-item" key={i} id={`stat-item-${i}`}>
-                            <span className="stat-value">{s.value}</span>
-                            <span className="stat-label">{s.label}</span>
+                    <div className="stats-left">
+                        <h2 className="stats-quote">
+                            AI is only powerful when executed strategically. At Nexviva, we engineer systems that <span className="highlight-box">transform operations</span> and create lasting competitive advantage.
+                        </h2>
+                        <div className="stats-author-row">
+                            <div className="stats-author">
+                                <img src="/Pratham Latest Photo.jpeg" alt="Prathamsinh Parmar" className="author-img" />
+                                <div className="author-info"> 
+                                    <strong>Prathamsinh Parmar</strong>
+                                    <span>Founder · Nexviva Ai</span>
+                                </div>
+                            </div>
+                            <img src="/Nexviva Logo.png" alt="Nexviva Logo" className="stats-logo" />
                         </div>
-                    ))}
+                    </div>
+                    <div className="stats-right">
+                        {stats.map((s, i) => (
+                            <div className="stat-item" key={i} id={`stat-item-${i}`}>
+                                <span className="stat-value">{s.value}</span>
+                                <span className="stat-label">{s.label}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
+
+            {/* ── Page Divider ──────────────────────────────────────────────── */}
+            <div className="page-divider"></div>
+
+            {/* ── FAQ Section ───────────────────────────────────────────────── */}
+            <FAQ />
+
+            {/* ── Page Divider ──────────────────────────────────────────────── */}
+            <div className="page-divider"></div>
 
             {/* ── Final CTA ─────────────────────────────────────────────────── */}
             <section className="cta-section" aria-label="Call to Action">
@@ -257,7 +300,7 @@ const Landing = () => {
                         <div className="cta-card__actions">
                             <button
                                 id="cta-get-started-btn"
-                                className="hero-cta-primary"
+                                className="cta-btn"
                                 onClick={handleGetStarted}
                             >
                                 <ZapIcon />
@@ -265,7 +308,7 @@ const Landing = () => {
                             </button>
                             <button
                                 id="cta-testimonials-btn"
-                                className="hero-cta-secondary"
+                                className="cta-btn"
                                 onClick={() => navigate('/testimonials')}
                             >
                                 <UsersIcon />

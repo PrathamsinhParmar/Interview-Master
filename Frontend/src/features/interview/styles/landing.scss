@@ -75,8 +75,8 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
         position: absolute;
         border-radius: 50%;
         filter: blur(120px);
-        opacity: 0.6;
-        animation: orb-float 20s ease-in-out infinite alternate;
+        opacity: 0.45;
+        // animation removed — three animating blurred orbs caused significant repaint
         will-change: transform;
     }
 
@@ -85,8 +85,7 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
         left: -10%;
         width: 60vw;
         height: 60vw;
-        background: rgba(36, 158, 148, 0.25);
-        animation-delay: 0s;
+        background: rgba(36, 158, 148, 0.2);
     }
 
     .ambient-orb--2 {
@@ -94,19 +93,11 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
         right: -20%;
         width: 70vw;
         height: 70vw;
-        background: rgba(59, 193, 168, 0.2);
-        animation-delay: -5s;
-        animation-duration: 25s;
+        background: rgba(59, 193, 168, 0.15);
     }
 
     .ambient-orb--3 {
-        top: 30%;
-        left: 30%;
-        width: 50vw;
-        height: 50vw;
-        background: rgba(12, 119, 121, 0.15);
-        animation-delay: -10s;
-        animation-duration: 30s;
+        display: none; // Third orb removed — redundant GPU load
     }
 }
 
@@ -160,8 +151,7 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
         border-radius: 50px;
         border: 1px solid rgba(36, 158, 148, 0.4);
         background: rgba(36, 158, 148, 0.08);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        // backdrop-filter removed — performance fix
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         font-size: 0.8rem;
         font-weight: 500;
@@ -188,7 +178,7 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
     }
 
     .hero-title {
-        font-size: clamp(2.8rem, 7vw, 5.5rem);
+        font-size: clamp(2.3rem, 6vw, 5rem);
         font-weight: 500;
         letter-spacing: -0.04em;
         line-height: 1.1;
@@ -196,6 +186,7 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
         animation: landing-fade-up 0.7s 0.1s ease both;
 
         .hero-title__accent {
+            font-weight: 300;
             color: $accent-alt;
             font-style: italic;
             padding-right: 0.1em;
@@ -224,47 +215,102 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
     .hero-cta-primary {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
+        min-height: 44px;
         gap: 0.5rem;
-        padding: 0.85rem 2rem;
+        padding: 0.85rem 2.2rem;
         border-radius: 50px;
-        background: $gradient-accent;
-        background-size: 200% 200%;
-        color: #fff;
-        font-size: 0.95rem;
+        
+        background: linear-gradient(
+            180deg, 
+            rgba(200, 225, 255, 0.45) 0%, 
+            rgba(200, 225, 255, 0.15) 100%
+        );
+        // backdrop-filter removed — was forcing GPU compositing on every animated frame
+        
+        color: #4afddc;
+        font-size: 1.05rem;
         font-weight: 600;
-        border: none;
+        
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 
+            inset 0 2px 2px rgba(255, 255, 255, 0.7), 
+            inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+            0 8px 24px rgba(36, 158, 148, 0.25);
+            
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         text-decoration: none;
-        animation: hero-gradient-shift 4s ease infinite;
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+            content: none; // Removed sweep animation — constant animation increases compositing cost
+        }
 
         &:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(36, 158, 148, 0.45);
+            background: linear-gradient(
+                180deg, 
+                rgba(200, 225, 255, 0.55) 0%, 
+                rgba(200, 225, 255, 0.25) 100%
+            );
+            box-shadow: 
+                inset 0 2px 2px rgba(255, 255, 255, 0.9), 
+                inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+                0 12px 36px rgba(36, 158, 148, 0.4);
         }
     }
 
     .hero-cta-secondary {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
+        min-height: 44px;
         gap: 0.5rem;
-        padding: 0.85rem 2rem;
+        padding: 0.85rem 2.2rem;
         border-radius: 50px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        
+        background: linear-gradient(
+            180deg, 
+            rgba(255, 255, 255, 0.1) 0%, 
+            rgba(255, 255, 255, 0.02) 100%
+        );
+        // backdrop-filter removed — was forcing GPU compositing on every animated frame
+        
         color: $text-primary;
-        font-size: 0.95rem;
+        font-size: 1.05rem;
         font-weight: 500;
+        
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 
+            inset 0 1px 1px rgba(255, 255, 255, 0.15),
+            0 4px 12px rgba(0, 0, 0, 0.2);
+            
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         text-decoration: none;
-        backdrop-filter: blur(8px);
+        position: relative;
+        overflow: hidden;
 
         &:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(36, 158, 148, 0.4);
+            background: linear-gradient(
+                180deg, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(255, 255, 255, 0.05) 100%
+            );
+            border-color: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
+            box-shadow: 
+                inset 0 1px 1px rgba(255, 255, 255, 0.25),
+                0 8px 24px rgba(0, 0, 0, 0.3);
         }
+    }
+
+    @keyframes button-sweep {
+        0% { left: -100%; }
+        15% { left: 200%; }
+        100% { left: 200%; }
     }
 
 }
@@ -322,6 +368,10 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
         grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
 
+        @media (max-width: 1024px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
         @media (max-width: 900px) {
             grid-template-columns: 1fr;
         }
@@ -332,9 +382,8 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
         border: 1px solid $border-color;
         border-radius: 20px;
         padding: 2.2rem 2rem;
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        // backdrop-filter removed — performance fix
+        transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
         cursor: default;
         position: relative;
         touch-action: none;
@@ -475,8 +524,9 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
 
 // ── How It Works Section ──────────────────────────────────────────────────────
 .how-section {
-    background: rgba(22, 27, 34, 0.25);
-    backdrop-filter: blur(8px);
+    position: relative;
+    z-index: 1;
+    background: rgba(22, 27, 34, 0.35);
     border-top: 1px solid $border-color;
     border-bottom: 1px solid $border-color;
 
@@ -492,6 +542,31 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
         @media (max-width: 900px) {
             grid-template-columns: 1fr;
             gap: 3rem;
+        }
+    }
+
+    .how-left {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: $accent;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 500;
+            letter-spacing: -0.04em;
+            line-height: 1.15;
+            color: #fff;
+            margin-bottom: 2.5rem;
         }
     }
 
@@ -541,162 +616,120 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
         width: 100%;
         display: flex;
         justify-content: center;
-        align-items: center;
-        min-height: 400px;
-        perspective: 1000px;
+        align-items: flex-start;
+        padding-top: 1rem;
 
-        .display-cards-container {
-            display: grid;
-            grid-template-areas: 'stack';
-            place-items: center;
-            opacity: 1;
-            transition: all 0.7s ease;
-            margin-right: 80px;
-            margin-top: 60px;
-
-            &:hover .display-card {
-                filter: grayscale(0%);
-                opacity: 1;
-                
-                &::before {
-                    opacity: 0;
-                }
-            }
+        .how-marquee-wrapper {
+            width: 100%;
+            max-width: 520px;
+            height: 480px;
+            padding: 20px 50px;
+            margin: -20px -50px;
+            overflow: hidden;
+            mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
         }
 
-        .display-card {
-            grid-area: stack;
-            position: relative;
+        .how-marquee-col {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            // Increased size of cards
-            height: 180px;
-            width: 380px;
+            gap: 1.1rem;
+            padding-bottom: 1.1rem;
+        }
+
+        .how-step-card {
+            width: 100%;
+            max-width: 460px;
+            background: linear-gradient(
+                135deg,
+                rgba(36, 158, 148, 0.07) 0%,
+                rgba(22, 27, 34, 0.55) 60%,
+                rgba(13, 17, 23, 0.65) 100%
+            );
+            // backdrop-filter removed — performance fix (cards are scrolling/animating)
+            border: 1px solid rgba(36, 158, 148, 0.18);
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.55rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+                0 12px 36px rgba(0, 0, 0, 0.35),
+                0 2px 8px rgba(36, 158, 148, 0.08);
+            transition: border-color 0.25s ease,
+                        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.25s ease;
+            position: relative;
             overflow: hidden;
-            transform: skewY(-8deg);
-            user-select: none;
-            border-radius: 18px;
-            border: 2px solid $border-color;
-            background: rgba(22, 27, 34, 0.8);
-            backdrop-filter: blur(8px);
-            padding: 1.5rem 1.75rem;
-            transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1),
-                        filter 1.1s cubic-bezier(0.16, 1, 0.3, 1),
-                        box-shadow 0.6s ease,
-                        border-color 0.6s ease,
-                        background 0.6s ease,
-                        opacity 0.6s ease;
-            
-            // Replicating the "before" overlay for the grayscale/fade effect
+
+            // Subtle inner shimmer at top edge
             &::before {
                 content: '';
                 position: absolute;
-                inset: 0;
-                border-radius: 18px;
-                background: rgba(12, 119, 121, 0.55);
-                mix-blend-mode: overlay;
-                transition: opacity 0.8s ease;
-                z-index: 1; // Above background, below content if content is z-index: 2
+                top: 0; left: 10%; right: 10%;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(59, 193, 168, 0.5), transparent);
                 pointer-events: none;
             }
 
-            // Wrap content to manage z-index
-            > * {
-                position: relative;
-                z-index: 2;
-            }
-
             &:hover {
-                border-color: rgba(36, 158, 148, 0.55);
-                background: rgba(22, 27, 34, 0.97);
-                box-shadow: 0 0 0 1px rgba(36, 158, 148, 0.2),
-                            0 12px 40px rgba(0, 0, 0, 0.4),
-                            0 0 30px rgba(36, 158, 148, 0.1);
-                z-index: 20 !important;
-                filter: grayscale(0%) !important;
-                transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                            filter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                            box-shadow 0.5s ease,
-                            border-color 0.4s ease,
-                            background 0.4s ease;
-
-                &::before {
-                    opacity: 0;
-                }
+                border-color: rgba(36, 158, 148, 0.45);
+                transform: translateY(-3px) scale(1.01);
+                box-shadow:
+                    0 0 0 1px rgba(36, 158, 148, 0.15) inset,
+                    0 16px 48px rgba(0, 0, 0, 0.4),
+                    0 0 32px rgba(36, 158, 148, 0.12);
             }
 
-            .card-header {
+            // Top row: emoji + step label
+            &__top {
                 display: flex;
                 align-items: center;
-                gap: 1rem;
+                justify-content: space-between;
+            }
 
-                .card-icon {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    background: rgba(36, 158, 148, 0.2);
-                    color: $accent;
-                    
-                    svg { width: 20px; height: 20px; }
-                }
+            // 3D Emoji icon
+            &__emoji {
+                font-size: 2.4rem;
+                line-height: 1;
+                filter: drop-shadow(0 4px 12px rgba(36, 158, 148, 0.35))
+                        drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+                transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                            filter 0.35s ease;
 
-                .card-title {
-                    font-size: 1.2rem;
-                    font-weight: 500;
-                    color: $accent-alt;
-                    margin: 0;
+                .how-step-card:hover & {
+                    transform: scale(1.15) translateY(-2px);
+                    filter: drop-shadow(0 6px 18px rgba(36, 158, 148, 0.5))
+                            drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
                 }
             }
 
-            .card-desc {
-                font-size: 0.9rem;
+            &__step {
+                font-size: 0.7rem;
+                font-weight: 700;
+                color: $accent;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                background: rgba(36, 158, 148, 0.1);
+                border: 1px solid rgba(36, 158, 148, 0.25);
+                border-radius: 50px;
+                padding: 0.25rem 0.7rem;
+            }
+
+            &__title {
+                font-size: 1.1rem;
+                font-weight: 500;
                 color: $text-primary;
-                line-height: 1.5;
-                margin: 0;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
+                margin: 0.2rem 0 0;
+                letter-spacing: -0.02em;
             }
 
-            .card-date {
-                font-size: 0.9rem;
+            &__desc {
+                font-size: 0.875rem;
                 color: $text-muted;
+                line-height: 1.6;
                 margin: 0;
-            }
-        }
-
-        // Apply stacked positions with staggered transitions
-        .card-0 { transform: skewY(-8deg) translateX(0) translateY(-60px);   z-index: 1; filter: grayscale(100%); transition-delay: 0.2s; }
-        .card-1 { transform: skewY(-8deg) translateX(40px) translateY(-25px);  z-index: 2; filter: grayscale(100%); transition-delay: 0.15s; }
-        .card-2 { transform: skewY(-8deg) translateX(80px) translateY(10px);   z-index: 3; filter: grayscale(100%); transition-delay: 0.1s; }
-        .card-3 { transform: skewY(-8deg) translateX(120px) translateY(45px);  z-index: 4; filter: grayscale(100%); transition-delay: 0.05s; }
-        .card-4 { transform: skewY(-8deg) translateX(160px) translateY(80px);  z-index: 5; filter: grayscale(0%); transition-delay: 0s; }
-
-        // Hover spread effect
-        .display-cards-container:hover {
-            .card-0 { transform: skewY(-8deg) translateX(0) translateY(-140px);  filter: grayscale(0%); transition-delay: 0s; }
-            .card-1 { transform: skewY(-8deg) translateX(40px) translateY(-85px); filter: grayscale(0%); transition-delay: 0.05s; }
-            .card-2 { transform: skewY(-8deg) translateX(80px) translateY(-30px); filter: grayscale(0%); transition-delay: 0.1s; }
-            .card-3 { transform: skewY(-8deg) translateX(120px) translateY(25px); filter: grayscale(0%); transition-delay: 0.15s; }
-            .card-4 { transform: skewY(-8deg) translateX(160px) translateY(80px); filter: grayscale(0%); transition-delay: 0.2s; }
-            
-            .display-card {
-                &::before { opacity: 0; }
-            }
-            
-            .display-card:hover {
-                transform: skewY(-8deg) scale(1.06) translateY(-8px) !important;
-                transition-delay: 0s !important;
-                transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                            filter 0.5s ease,
-                            box-shadow 0.5s ease,
-                            border-color 0.4s ease,
-                            background 0.4s ease !important;
             }
         }
     }
@@ -706,125 +739,261 @@ $font-stack:      var(--font-family-base, 'Inter', sans-serif);
 .stats-section {
     z-index: 1;
     position: relative;
+    // padding-bottom: rem;
 
     .stats-inner {
-        max-width: 1200px;
+        max-width: 1300px;
         margin: 0 auto;
-        padding: 5rem 2rem;
+        padding: 7rem 3.5rem;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 2rem;
-        text-align: center;
+        grid-template-columns: 1.5fr 1fr; // Left section wider, right section narrower
+        gap: 6rem;
+        align-items: stretch; // Ensure both columns have equal height
 
-        @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
-        @media (max-width: 480px) { grid-template-columns: 1fr; }
+        @media (max-width: 1024px) {
+            grid-template-columns: 1fr;
+            gap: 5rem;
+            padding: 5rem 2rem;
+            align-items: flex-start;
+        }
+    }
+
+    .stats-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; // Pushes author/logo to the exact bottom
+    }
+
+    .stats-quote {
+        font-size: clamp(1rem, 3vw, 2.6rem);
+        font-weight: 500;
+        line-height: 1.2;
+        color: #f1f1f1;
+        letter-spacing: -0.04em;
+        margin: 0;
+
+        .highlight-box {
+            background: #3BC1A8;
+            color: #0d0d0f;
+            padding: 0.001em 0.3em;
+            border-radius: 10px;
+            display: inline;
+            line-height: 1.3;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            font-weight: 500;
+        }
+    }
+
+    .stats-author-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 95%;
+        margin-top: 1rem; // Fallback spacing in case flex space-between isn't enough
+    }
+
+    .stats-author {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+
+        .author-img {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+            // gap: -0.2rem;
+
+            strong {
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #ffffff;
+            }
+
+            span {
+                font-family: 'Geist Mono', monospace;
+                font-size: 0.85rem;
+                color: #8b8e98;
+                font-weight: 400;
+                margin-bottom: 0.1rem;
+            }
+        }
+    }
+
+    .stats-logo {
+        height: 28px;
+        object-fit: contain;
+        opacity: 0.9;
+    }
+
+    .stats-right {
+        margin-top: 0.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-content: space-between; // Pushes rows to top and bottom to match left section height
+        column-gap: 2rem;
+
+        @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+
+            .stat-item {
+                padding-bottom: 1.5rem;
+
+                &::after {
+                    right: 0;
+                }
+
+                &:nth-child(2)::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    height: 1px;
+                    background: rgba(255, 255, 255, 0.06);
+                }
+            }
+        }
     }
 
     .stat-item {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 2rem 1rem;
-        border-radius: 16px;
-        background: $bg-panel;
-        border: 1px solid $border-color;
-        backdrop-filter: blur(12px);
-        transition: all 0.3s ease;
-
-        &:hover {
-            border-color: $border-accent;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(36, 158, 148, 0.12);
+        gap: 0.2rem;
+        padding-bottom: 2.5rem;
+        position: relative;
+        
+        // Horizontal divider under the top row items
+        &:nth-child(1), &:nth-child(2) {
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 15%; // Keep line slightly shorter than full width, matching screenshot
+                height: 1px;
+                background: rgba(255, 255, 255, 0.06);
+            }
         }
 
         .stat-value {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 600;
-            letter-spacing: -0.04em;
-            background: $gradient-accent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: clamp(3rem, 6vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            color: #ffffff;
+            line-height: 1;
         }
 
         .stat-label {
-            font-size: 0.85rem;
-            color: $text-muted;
-            font-weight: 400;
+            font-size: 0.9rem;
+            color: #8b8e98;
+            line-height: 1.5;
+            max-width: 85%;
         }
     }
+}
+
+// ── Page Divider ──────────────────────────────────────────────────────────────
+.page-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.04); // Extremely subtle, dark line matching the screenshot
+    margin: 2rem 0;
+    position: relative;
+    z-index: 1;
 }
 
 // ── Final CTA Section ─────────────────────────────────────────────────────────
 .cta-section {
     z-index: 1;
     position: relative;
+    background: transparent;
 
     .cta-inner {
-        max-width: 1200px;
+        max-width: 1000px;
         margin: 0 auto;
-        padding: 0 2rem 7rem;
+        padding: 4rem 2rem 10rem;
     }
 
     .cta-card {
-        background: $bg-panel;
-        border: 1px solid $border-accent;
-        border-radius: 28px;
-        padding: 4rem 3rem;
+        background: transparent;
+        border: none;
+        padding: 4rem 1rem;
         text-align: center;
-        backdrop-filter: blur(20px);
         position: relative;
         overflow: hidden;
 
-        &::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(36, 158, 148, 0.12) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        &::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 50%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(36, 158, 148, 0.8), transparent);
-        }
-
         .cta-card__label {
             display: inline-block;
-            font-size: 0.78rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: $accent;
-            margin-bottom: 1rem;
+            color: #2da197;
+            margin-bottom: 1.5rem;
         }
 
         .cta-card__title {
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
-            font-weight: 500;
-            letter-spacing: -0.03em;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 600;
+            letter-spacing: -0.04em;
             color: #fff;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
         }
 
         .cta-card__sub {
-            font-size: 1rem;
-            color: $text-muted;
-            max-width: 440px;
-            margin: 0 auto 2.5rem;
-            line-height: 1.7;
+            font-size: 1.2rem;
+            color: #a1a1aa;
+            max-width: 700px;
+            margin: 0 auto 3.5rem;
+            line-height: 1.6;
+            font-weight: 300;
         }
 
         .cta-card__actions {
             display: flex;
-            gap: 1rem;
+            gap: 1.2rem;
             justify-content: center;
             flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            gap: 0.6rem;
+            padding: 0.8rem 1.6rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            border: 1px solid rgba(29, 220, 208, 0.532);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            // backdrop-filter removed — performance fix
+
+            svg {
+                opacity: 0.9;
+                width: 22px;
+                height: 22px;
+            }
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.25);
+                border-color: rgba(255, 255, 255, 0.4);
+                transform: translateY(-2px);
+            }
         }
     }
 }

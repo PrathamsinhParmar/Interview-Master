@@ -212,13 +212,13 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
     display: none;
     flex-direction: column;
     justify-content: space-between;
-    width: 24px;
-    height: 18px;
+    width: 44px;
+    height: 44px;
+    padding: 13px 10px;
     background: transparent;
     border: none;
     cursor: pointer;
     z-index: 1001; // Keep above mobile menu
-    padding: 0;
 
     .bar {
         width: 100%;
@@ -312,6 +312,8 @@ $font-stack: var(--font-family-base, 'Inter', sans-serif);
         color: $text-muted;
         cursor: pointer;
         padding: 0.5rem;
+        min-width: 44px;
+        min-height: 44px;
         border-radius: 50%;
         display: flex;
         align-items: center;

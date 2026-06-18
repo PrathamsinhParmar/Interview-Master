@@ -164,7 +164,7 @@ const GlslHills = ({ width = '100%', height = '100%', cameraZ = 125, planeSize =
             renderer.setSize(w, h);
         };
 
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(1); // Force 1x — eliminates 4x pixel fill on retina screens
         renderer.setClearColor(0x000000, 0);
         camera.position.set(0, 15, cameraZ);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -175,10 +175,15 @@ const GlslHills = ({ width = '100%', height = '100%', cameraZ = 125, planeSize =
 
         window.addEventListener('resize', resize);
 
-        const renderLoop = () => {
+        // Throttle to ~30fps — halves GPU work vs 60fps, imperceptible on slow animations
+        const TARGET_MS = 1000 / 30;
+        let lastTime = 0;
+        const renderLoop = (timestamp) => {
+            animFrameRef.current = requestAnimationFrame(renderLoop);
+            if (timestamp - lastTime < TARGET_MS) return;
+            lastTime = timestamp;
             plane.render(clock.getDelta());
             renderer.render(scene, camera);
-            animFrameRef.current = requestAnimationFrame(renderLoop);
         };
         renderLoop();
 
